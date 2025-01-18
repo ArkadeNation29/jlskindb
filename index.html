@@ -114,7 +114,7 @@
 
     <div class="skin-grid" id="skin-grid">
         <div class="skin-card" data-tags="racing landscape">
-            <img src="skins/Asphalt6AdrenalineLS.png" alt="Asphalt 6: Adrenaline" class="thumbnail-img">
+            <img src="thumb/Asphalt6AdrenalineLS.png" alt="Asphalt 6: Adrenaline" class="thumbnail-img">
             <div class="skin-info">
                 <h3>Asphalt 6: Adrenaline</h3>
                 <p><b>by ArkadeNation29</b></p>
@@ -124,7 +124,7 @@
             </div>
         </div>
         <div class="skin-card" data-tags="anime portrait">
-            <img src="skins/JJK_Gojo.png" alt="Satoru Gojo" class="thumbnail-img">
+            <img src="thumb/JJK_Gojo.png" alt="Satoru Gojo" class="thumbnail-img">
             <div class="skin-info">
                 <h3>Satoru Gojo</h3>
                 <p><b>by ArkadeNation29</b></p>
@@ -134,7 +134,7 @@
             </div>
         </div>
         <div class="skin-card" data-tags="game portrait">
-            <img src="skins/KIMGOC_HollowCastle.png" alt="Hollow Castle" class="thumbnail-img">
+            <img src="thumb/KIMGOC_HollowCastle.png" alt="Hollow Castle" class="thumbnail-img">
             <div class="skin-info">
                 <h3>Hollow Castle</h3>
                 <p><b>by ArkadeNation29</b></p>
@@ -144,7 +144,7 @@
             </div>
         </div>
         <div class="skin-card" data-tags="nokia portrait">
-            <img src="skins/Nokia2300.png" alt="Nokia 2300" class="thumbnail-img">
+            <img src="thumb/Nokia2300.png" alt="Nokia 2300" class="thumbnail-img">
             <div class="skin-info">
                 <h3>Nokia 2300</h3>
                 <p><b>by ArkadeNation29</b></p>
@@ -158,45 +158,58 @@
     <canvas id="thumbnail-canvas"></canvas>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const images = document.querySelectorAll('.thumbnail-img');
-            const canvas = document.getElementById('thumbnail-canvas');
-            const ctx = canvas.getContext('2d');
+    document.addEventListener('DOMContentLoaded', function() {
+        const images = document.querySelectorAll('.thumbnail-img');
+        const canvas = document.getElementById('thumbnail-canvas');
+        const ctx = canvas.getContext('2d');
 
-            images.forEach(img => {
-                const originalSrc = img.src;
-                const image = new Image();
-                image.src = originalSrc;
+        images.forEach(img => {
+            const originalSrc = img.src.replace('thumb/', 'skins/');
+            const image = new Image();
+            image.src = originalSrc;
 
-                image.onload = () => {
-                    const width = image.width / 2;
-                    const height = image.height / 2;
-                    canvas.width = width;
-                    canvas.height = height;
+            image.onload = () => {
+                const width = image.width / 2;
+                const height = image.height / 2;
+                canvas.width = width;
+                canvas.height = height;
 
-                    ctx.clearRect(0, 0, width, height);
-                    ctx.drawImage(image, 0, 0, width, height);
+                ctx.clearRect(0, 0, width, height);
+                ctx.drawImage(image, 0, 0, width, height);
 
-                    img.src = canvas.toDataURL('image/jpeg');
-                };
-            });
+                const thumbnailSrc = canvas.toDataURL('image/jpeg');
+                img.src = thumbnailSrc;
 
-            const searchInput = document.getElementById('search-input');
-            const skinGrid = document.getElementById('skin-grid');
-            const skinCards = document.querySelectorAll('.skin-card');
-
-            searchInput.addEventListener('input', function() {
-                const searchTerm = searchInput.value.toLowerCase();
-                skinCards.forEach(card => {
-                    const tags = card.getAttribute('data-tags').toLowerCase();
-                    if (tags.includes(searchTerm)) {
-                        card.style.display = '';
-                    } else {
-                        card.style.display = 'none';
-                    }
+                // Save thumbnail to the server
+                fetch('/save-thumbnail', { // Update this line if necessary to match your server route
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        imageName: img.alt,
+                        thumbnailData: thumbnailSrc
+                    })
                 });
+            };
+        });
+
+        const searchInput = document.getElementById('search-input');
+        const skinGrid = document.getElementById('skin-grid');
+        const skinCards = document.querySelectorAll('.skin-card');
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = searchInput.value.toLowerCase();
+            skinCards.forEach(card => {
+                const tags = card.getAttribute('data-tags').toLowerCase();
+                if (tags.includes(searchTerm)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
             });
         });
-    </script>
+    });
+</script>
 </body>
 </html>
