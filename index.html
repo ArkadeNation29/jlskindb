@@ -224,8 +224,17 @@
                 canvas.width = width;
                 canvas.height = height;
 
-                ctx.clearRect(0, 0, width, height);
+                // Draw filler background
+                ctx.fillStyle = 'white'; // Change this to your desired filler color
+                ctx.fillRect(0, 0, width, height);
+
+                // Draw the image
                 ctx.drawImage(image, 0, 0, width, height);
+
+                // Add watermark
+                ctx.font = "20px Arial";
+                ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+                ctx.fillText("Watermark", 10, height - 10);
 
                 const thumbnailSrc = canvas.toDataURL('image/jpeg');
                 img.src = thumbnailSrc;
