@@ -66,6 +66,10 @@
         .download-btn:hover {
             background: #45a049;
         }
+
+        #thumbnail-canvas {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -76,7 +80,7 @@
 
     <div class="skin-grid">
         <div class="skin-card">
-            <img src="skins/Asphalt6AdrenalineLS.png" alt="Asphalt 6: Adrenaline">
+            <img src="skins/Asphalt6AdrenalineLS.png" alt="Asphalt 6: Adrenaline" class="thumbnail-img">
             <div class="skin-info">
                 <h3>Asphalt 6: Adrenaline</h3>
                 <p><b>by ArkadeNation29</b></p>
@@ -86,7 +90,7 @@
             </div>
         </div>
         <div class="skin-card">
-            <img src="skins/JJK_Gojo.png" alt="Satoru Gojo">
+            <img src="skins/JJK_Gojo.png" alt="Satoru Gojo" class="thumbnail-img">
             <div class="skin-info">
                 <h3>Satoru Gojo</h3>
                 <p><b>by ArkadeNation29</b></p>
@@ -96,7 +100,7 @@
             </div>
         </div>
         <div class="skin-card">
-            <img src="skins/KIMGOC_HollowCastle.png" alt="Hollow Castle">
+            <img src="skins/KIMGOC_HollowCastle.png" alt="Hollow Castle" class="thumbnail-img">
             <div class="skin-info">
                 <h3>Hollow Castle</h3>
                 <p><b>by ArkadeNation29</b></p>
@@ -106,7 +110,7 @@
             </div>
         </div>
         <div class="skin-card">
-            <img src="skins/Nokia2300.png" alt="Nokia 2300">
+            <img src="skins/Nokia2300.png" alt="Nokia 2300" class="thumbnail-img">
             <div class="skin-info">
                 <h3>Nokia 2300</h3>
                 <p><b>by ArkadeNation29</b></p>
@@ -116,5 +120,33 @@
             </div>
         </div>
     </div>
+
+    <canvas id="thumbnail-canvas"></canvas>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('.thumbnail-img');
+            const canvas = document.getElementById('thumbnail-canvas');
+            const ctx = canvas.getContext('2d');
+
+            images.forEach(img => {
+                const originalSrc = img.src;
+                const image = new Image();
+                image.src = originalSrc;
+
+                image.onload = () => {
+                    const width = image.width / 2;
+                    const height = image.height / 2;
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    ctx.clearRect(0, 0, width, height);
+                    ctx.drawImage(image, 0, 0, width, height);
+
+                    img.src = canvas.toDataURL('image/jpeg');
+                };
+            });
+        });
+    </script>
 </body>
 </html>
