@@ -27,6 +27,19 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
+        .search-bar {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px;
+            width: 80%;
+            max-width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
         .skin-grid {
             display: flex;
             flex-wrap: wrap;
@@ -51,6 +64,7 @@
 
         .skin-info {
             text-align: center;
+            font-size: 1.5vw;
         }
 
         .download-btn {
@@ -61,6 +75,7 @@
             text-decoration: none;
             border-radius: 5px;
             margin-top: 10px;
+            font-size: 1.5vw;
         }
 
         .download-btn:hover {
@@ -78,8 +93,12 @@
         <p>An effort to ease the skins searching</p>
     </div>
 
-    <div class="skin-grid">
-        <div class="skin-card">
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search skins...">
+    </div>
+
+    <div class="skin-grid" id="skin-grid">
+        <div class="skin-card" data-tags="racing landscape">
             <img src="skins/Asphalt6AdrenalineLS.png" alt="Asphalt 6: Adrenaline" class="thumbnail-img">
             <div class="skin-info">
                 <h3>Asphalt 6: Adrenaline</h3>
@@ -89,7 +108,7 @@
                 <a href="skins/Asphalt6AdrenalineLS.png" download class="download-btn">Download</a>
             </div>
         </div>
-        <div class="skin-card">
+        <div class="skin-card" data-tags="anime portrait">
             <img src="skins/JJK_Gojo.png" alt="Satoru Gojo" class="thumbnail-img">
             <div class="skin-info">
                 <h3>Satoru Gojo</h3>
@@ -99,7 +118,7 @@
                 <a href="skins/JJK_Gojo.png" download class="download-btn">Download</a>
             </div>
         </div>
-        <div class="skin-card">
+        <div class="skin-card" data-tags="castle portrait">
             <img src="skins/KIMGOC_HollowCastle.png" alt="Hollow Castle" class="thumbnail-img">
             <div class="skin-info">
                 <h3>Hollow Castle</h3>
@@ -109,7 +128,7 @@
                 <a href="skins/KIMGOC_HollowCastle.png" download class="download-btn">Download</a>
             </div>
         </div>
-        <div class="skin-card">
+        <div class="skin-card" data-tags="nokia landscape">
             <img src="skins/Nokia2300.png" alt="Nokia 2300" class="thumbnail-img">
             <div class="skin-info">
                 <h3>Nokia 2300</h3>
@@ -145,6 +164,22 @@
 
                     img.src = canvas.toDataURL('image/jpeg');
                 };
+            });
+
+            const searchInput = document.getElementById('search-input');
+            const skinGrid = document.getElementById('skin-grid');
+            const skinCards = document.querySelectorAll('.skin-card');
+
+            searchInput.addEventListener('input', function() {
+                const searchTerm = searchInput.value.toLowerCase();
+                skinCards.forEach(card => {
+                    const tags = card.getAttribute('data-tags').toLowerCase();
+                    if (tags.includes(searchTerm)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
             });
         });
     </script>
