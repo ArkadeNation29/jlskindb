@@ -231,7 +231,7 @@
                 img.src = thumbnailSrc;
 
                 // Save thumbnail to the server
-                fetch('/save-thumbnail', { // Update this line if necessary to match your server route
+                fetch('/save-thumbnail', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -252,7 +252,8 @@
             const searchTerm = searchInput.value.toLowerCase();
             skinCards.forEach(card => {
                 const tags = card.getAttribute('data-tags').toLowerCase();
-                if (tags.includes(searchTerm)) {
+                const name = card.querySelector('.skin-info h3').textContent.toLowerCase();
+                if (tags.includes(searchTerm) || name.includes(searchTerm)) {
                     card.style.display = '';
                 } else {
                     card.style.display = 'none';
