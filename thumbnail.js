@@ -14,8 +14,10 @@ app.post('/save-thumbnail', (req, res) => {
     fs.writeFile(filePath, base64Data, 'base64', (err) => {
         if (err) {
             console.error('Error saving thumbnail:', err);
+            console.error('File path:', filePath);
             return res.status(500).send('Error saving thumbnail');
         }
+        console.log('Thumbnail saved at:', filePath);
         res.send('Thumbnail saved');
     });
 });
