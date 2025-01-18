@@ -7,7 +7,7 @@ app.use(express.json({ limit: '50mb' }));
 
 app.post('/save-thumbnail', (req, res) => {
     const { imageName, thumbnailData } = req.body;
-    const filePath = path.join(__dirname, 'thumb', `${imageName}.png`);
+    const filePath = path.join(__dirname, 'thumb', `${imageName}.jpeg`);
 
     const base64Data = thumbnailData.replace(/^data:image\/jpeg;base64,/, '');
 
