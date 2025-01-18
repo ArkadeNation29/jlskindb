@@ -28,8 +28,8 @@
         }
 
         .skin-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
             gap: 20px;
         }
 
@@ -38,6 +38,8 @@
             border-radius: 10px;
             padding: 15px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            flex: 1 1 250px;
+            max-width: calc(33.333% - 20px); /* Adjust the max-width to control the number of items per row */
         }
 
         .skin-card img {
@@ -83,9 +85,6 @@
                 <a href="skins/Asphalt6AdrenalineLS.png" download class="download-btn">Download</a>
             </div>
         </div>
-    </div>
-    
-    
         <div class="skin-card">
             <img src="skins/JJK_Gojo.png" alt="Satoru Gojo">
             <div class="skin-info">
@@ -96,9 +95,6 @@
                 <a href="skins/JJK_Gojo.png" download class="download-btn">Download</a>
             </div>
         </div>
-    
-
-    
         <div class="skin-card">
             <img src="skins/KIMGOC_HollowCastle.png" alt="Hollow Castle">
             <div class="skin-info">
@@ -109,6 +105,6 @@
                 <a href="skins/KIMGOC_HollowCastle.png" download class="download-btn">Download</a>
             </div>
         </div>
-    
+    </div>
 </body>
 </html>
