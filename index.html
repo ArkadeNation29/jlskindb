@@ -193,7 +193,7 @@
                 <a href="skins/Nokia9210Communicator.png" download class="download-btn">Download</a>
             </div>
         </div>
-         <div class="skin-card" data-tags="sony ericsson portrait 176x220 k700i">
+        <div class="skin-card" data-tags="sony ericsson portrait 176x220 k700i">
             <img src="thumb/SonyEricssonK700i.png" alt="Sony Ericsson K700i" class="thumbnail-img">
             <div class="skin-info">
                 <h3>Sony Ericsson K700i</h3>
@@ -202,39 +202,40 @@
                 <p>Orientation: Portrait</p>
                 <a href="skins/SonyEricssonK700i.png" download class="download-btn">Download</a>
             </div>
+        </div>
         <div class="skin-card" data-tags="landscape 320x240 cartoon game pixel">
-    <img src="thumb/pixel_thumb.jpg" alt="pixel" class="thumbnail-img">
-    <div class="skin-info">
-        <h3>Sony Pixel</h3>
-        <p><b>by <a href="https://www.facebook.com/groups/164177364076344/user/100003301332469/" target="_blank">Dimas Syahputra</a></b></p>
-        <p>Resolution: 320x240</p>
-        <p>Orientation: Landscape</p>
-        <a href="https://www.facebook.com/share/p/1CrDaK87K8/" class="download-btn">Download</a>
-    </div>
-</div>
+            <img src="thumb/pixel_thumb.jpg" alt="pixel" class="thumbnail-img">
+            <div class="skin-info">
+                <h3>Sony Pixel</h3>
+                <p><b>by <a href="https://www.facebook.com/groups/164177364076344/user/100003301332469/" target="_blank">Dimas Syahputra</a></b></p>
+                <p>Resolution: 320x240</p>
+                <p>Orientation: Landscape</p>
+                <a href="https://www.facebook.com/share/p/1CrDaK87K8/" class="download-btn">Download</a>
+            </div>
+        </div>
     </div>
 
     <canvas id="thumbnail-canvas"></canvas>
 
    <script>
     document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('search-input');
-    const skinGrid = document.getElementById('skin-grid');
-    const skinCards = document.querySelectorAll('.skin-card');
+        const searchInput = document.getElementById('search-input');
+        const skinGrid = document.getElementById('skin-grid');
+        const skinCards = document.querySelectorAll('.skin-card');
 
-    searchInput.addEventListener('input', function() {
-        const searchTerm = searchInput.value.toLowerCase();
-        skinCards.forEach(card => {
-            const tags = card.getAttribute('data-tags').toLowerCase();
-            const name = card.querySelector('.skin-info h3').textContent.toLowerCase();
-            if (tags.includes(searchTerm) || name.includes(searchTerm)) {
-                card.style.display = '';
-            } else {
-                card.style.display = 'none';
-            }
+        searchInput.addEventListener('input', function() {
+            const searchTerm = searchInput.value.toLowerCase();
+            skinCards.forEach(card => {
+                const tags = card.getAttribute('data-tags').toLowerCase();
+                const name = card.querySelector('.skin-info h3').textContent.toLowerCase();
+                if (tags.includes(searchTerm) || name.includes(searchTerm)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
         });
     });
-});
-</script>
+    </script>
 </body>
 </html>
