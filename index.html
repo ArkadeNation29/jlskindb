@@ -84,8 +84,8 @@
 
         @media (max-width: 600px) {
             .skin-card {
-                flex: 1 1 100%;
-                max-width: 100%;
+                flex: 1 1 calc(50% - 20px);
+                max-width: calc(50% - 20px);
             }
 
             .skin-info {
@@ -268,11 +268,23 @@
 
     <canvas id="thumbnail-canvas"></canvas>
 
-   <script>
+    <script>
     document.addEventListener('DOMContentLoaded', function() {
         const searchInput = document.getElementById('search-input');
         const skinGrid = document.getElementById('skin-grid');
-        const skinCards = document.querySelectorAll('.skin-card');
+        const skinCards = Array.from(document.querySelectorAll('.skin-card'));
+
+        // Sort skin cards by name
+        skinCards.sort((a, b) => {
+            const nameA = a.querySelector('.skin-info h3').textContent.toLowerCase();
+            const nameB = b.querySelector('.skin-info h3').textContent.toLowerCase();
+            return nameA.localeCompare(nameB);
+        });
+
+        // Append sorted skin cards back to the grid
+        skinCards.forEach(card => {
+            skinGrid.appendChild(card);
+        });
 
         searchInput.addEventListener('input', function() {
             const searchTerm = searchInput.value.toLowerCase();
