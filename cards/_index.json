@@ -1,0 +1,33 @@
+{
+  "cards": [
+    "asphalt6.json",
+    "gojo.json",
+    "hollow.json",
+    "nokia2300.json",
+    "nokia5300.json",
+    "nokia5800.json",
+    "nokia6300.json",
+    "nokia9210.json",
+    "k700i.json",
+    "c201.json",
+    "gameloft20.json",
+    "nokia3220.json",
+    "nokiax201.json",
+    "k800i.json",
+    "s8000.json",
+    "umk3.json",
+    "psp.json",
+    "whatspad.json",
+    "gameboy.json",
+    "gba.json",
+    "gamewatch.json",
+    "wolly.json",
+    "ds5.json",
+    "nokia150.json",
+    "nokia5130.json",
+    "andromax.json",
+    "nokia215.json"
+  ],
+  "version": "1.0",
+  "last_updated": "2024-12-21"
+}

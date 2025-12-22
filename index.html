@@ -1,375 +1,88 @@
+<!-- index.html - Main file (lightweight!) -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JL-Mod Skins Database</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/style.css">
 </head>
-
 <body>
-    <div class="header">
-        <h1>JL-Mod Skins Database</h1>
-        <p>Effortlessly Find Your Perfect JL-Mod Skins</p>
+    <header>
+        <div class="header-content">
+            <div>
+                <h1>🎮 JL-Mod Skins Database</h1>
+                <p class="tagline">Effortlessly Find Your Perfect JL-Mod Skins</p>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+        </div>
+    </header>
+
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-number" id="totalSkins">0</div>
+            <div class="stat-label">Total Skins</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="showingCount">0</div>
+            <div class="stat-label">Showing</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="newCount">0</div>
+            <div class="stat-label">New This Week</div>
+        </div>
     </div>
 
-    <div class="search-bar">
-        <input type="text" id="search-input" placeholder="Search skins...">
+    <div class="controls">
+        <div class="search-filter">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Search skins..." onkeyup="filterSkins()">
+            </div>
+            <div class="filter-group">
+                <button class="filter-btn" data-filter="portrait" onclick="toggleFilter(this, 'orientation')">Portrait</button>
+                <button class="filter-btn" data-filter="landscape" onclick="toggleFilter(this, 'orientation')">Landscape</button>
+            </div>
+        </div>
+
+        <div class="category-tabs">
+            <button class="category-tab active" onclick="filterCategory('all')">All Skins</button>
+            <button class="category-tab" onclick="filterCategory('device')">📱 Device Skins</button>
+            <button class="category-tab" onclick="filterCategory('game')">🎮 Game Skins</button>
+            <button class="category-tab" onclick="filterCategory('console')">🕹️ Console Skins</button>
+            <button class="category-tab" onclick="filterCategory('custom')">✨ Custom Themes</button>
+        </div>
     </div>
 
-    <div class="skin-grid" id="skin-grid">
-        <div class="skin-card" data-tags="landscape 480x800 asphalt game">
-            <img src="thumb/asphalt6_thumb.jpg" alt="Asphalt 6: Adrenaline" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Asphalt 6: Adrenaline</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 480x800</p>
-                <p>Orientation: Landscape</p>
-                <a href="skins/Asphalt6AdrenalineLS.png" download class="download-btn">Download</a>
-            </div>
+    <div class="container">
+        <div id="loadingState" class="loading">
+            <div class="spinner"></div>
+            <p>Loading skins...</p>
         </div>
-        <div class="skin-card" data-tags="anime portrait 240x320 gojo cartoon">
-            <img src="thumb/gojo_thumb.jpg" alt="Satoru Gojo" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Satoru Gojo</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 240x320</p>
-                <p>Orientation: Portrait</p>
-                <a href="skins/JJK_Gojo.png" download class="download-btn">Download</a>
-            </div>
+
+        <div class="skins-grid" id="skinsGrid"></div>
+        
+        <div class="load-more-section" id="loadMoreSection">
+            <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()">
+                <span>⬇️ Load More Skins</span>
+            </button>
+            <div class="load-info" id="loadInfo"></div>
         </div>
-        <div class="skin-card" data-tags="game portrait 240x320 hollow castle">
-            <img src="thumb/hollow_thumb.jpg" alt="Hollow Castle" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Hollow Castle</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 240x320</p>
-                <p>Orientation: Portrait</p>
-                <a href="skins/KIMGOC_HollowCastle.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="nokia portrait 96x65 2300">
-            <img src="thumb/2300_thumb.jpg" alt="Nokia 2300" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Nokia 2300</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 96x65</p>
-                <p>Orientation: Portrait</p>
-                <a href="skins/Nokia2300.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="nokia portrait 240x320 xpressmusic 5300">
-            <img src="thumb/5300_thumb.jpg" alt="Nokia 5300 XpressMusic" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Nokia 5300 XpressMusic</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 240x320</p>
-                <p>Orientation: Portrait</p>
-                <a href="skins/Nokia5300XpressMusic.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="nokia portrait 360x640 xpressmusic 5800">
-            <img src="thumb/5800_thumb.jpg" alt="Nokia 5800 XpressMusic" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Nokia 5800 XpressMusic</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 360x640</p>
-                <p>Orientation: Landscape</p>
-                <a href="skins/Nokia5800.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="nokia portrait 240x320 6300">
-            <img src="thumb/6300_thumb.jpg" alt="Nokia 6300" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Nokia 6300 4G</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 240x320</p>
-                <p>Orientation: Portrait</p>
-                <a href="skins/Nokia6300.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="nokia portrait 80x48 96x65 communicator 9210">
-            <img src="thumb/9210_thumb.jpg" alt="Nokia 9210 Communicator" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Nokia 9210 Communicator</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 80x48</p>
-                <p>Orientation: Portrait</p>
-                <a href="skins/Nokia9210Communicator.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="sony ericsson portrait 176x220 k700i">
-            <img src="thumb/k700i_thumb.jpg" alt="Sony Ericsson K700i" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Sony Ericsson K700i</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 176x220</p>
-                <p>Orientation: Portrait</p>
-                <a href="skins/SonyEricssonK700i.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="landscape 320x240 cartoon game pixel">
-            <img src="thumb/pixel_thumb.jpg" alt="pixel" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Pixel</h3>
-                <p><b>by <a href="https://www.facebook.com/groups/164177364076344/user/100003301332469/" target="_blank">Dimas Syahputra</a></b></p>
-                <p>Resolution: 320x240</p>
-                <p>Orientation: Landscape</p>
-                <a href="https://www.facebook.com/share/p/1CrDaK87K8/" class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="portrait 240x320 mockup nokia pack x2 206 215 x2-00 x2-02 x200 x202">
-            <img src="thumb/antz_thumb.jpg" alt="antz" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Antz Pack</h3>
-                <p>Nokia 215, Nokia 206, Nokia X2-00, Nokia X2-02</p>
-                <p><b>by <a href="https://www.facebook.com/groups/164177364076344/user/100001054755826/" target="_blank">Rachmad Antx'z</a></b></p>
-                <p>Resolution: 240x320</p>
-                <p>Orientation: Portrait</p>
-                <a href="https://www.facebook.com/share/p/1AzqzoJXVm/" class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="portrait 240x320 nokia c2 c201 c2-01">
-            <img src="thumb/C201_thumb.jpg" alt="Nokia C2-01" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Nokia C2-01</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 240x320</p>
-                <p>Orientation: Portrait</p>
-                <a href="skins/C2-01.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="portrait 240x320 gameloft game">
-            <img src="thumb/gc20_thumb.jpg" alt="Gameloft Classic 20 Years" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Gameloft Classic 20 Years</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 240x320</p>
-                <p>Orientation: Portrait</p>
-                <a href="skins/Gameloft Anniversary Skin (L).png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="portrait 128x128 nokia 3220">
-            <img src="thumb/3220_thumb.jpg" alt="Nokia 3220" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Nokia 3220</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 128x128</p>
-                <p>Orientation: Portrait</p>
-                <a href="skins/Nokia 3220.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="portrait 128x128 nokia 3220">
-            <img src="thumb/x201_thumb.jpg" alt="Nokia X2-01" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Nokia X2-01</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 320x240</p>
-                <p>Orientation: Portrait</p>
-                <a href="skins/Nokia X2-01.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="portrait 240x320 sony ericsson k800i">
-            <img src="thumb/k800i_thumb.jpg" alt="Sony Ericsson K800i" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Sony Ericsson K800i</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 240x320</p>
-                <p>Orientation: Portrait</p>
-                <a href="skins/Sony Ericsson K800i.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="landscape 480x800 samsung s8000 jet">
-            <img src="thumb/s8000_thumb.jpg" alt="Samsung S8000 Jet" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Samsung S8000 Jet</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 480x800</p>
-                <p>Orientation: Landscape</p>
-                <a href="skins/Samsung S8000.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="240x320 landscape game fighting mortal kombat ultimate 3">
-            <img src="thumb/umk3_thumb.jpg" alt="Ultimate Mortal Kombat 3" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Ultimate Mortal Kombat 3</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 240x320</p>
-                <p>Orientation: Landscape</p>
-                <a href="skins/UMK3.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="320x240 landscape game console psp playstation portable">
-            <img src="thumb/psp_thumb.jpg" alt="Playstation Portable" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Playstation Portable</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 320x240</p>
-                <p>Orientation: Landscape</p>
-                <a href="skins/psp.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="240x320 landscape wa whatsapp whatpad app apk">
-            <img src="thumb/whatspad_thumb.jpg" alt="WhatsPad" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>WhatsPad</h3>
-                <p><b>by JidunBlocks</b></p>
-                <p>Resolution: 240x320</p>
-                <p>Orientation: Landscape</p>
-                <a href="skins/Whatpad.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="240x320 game console gameboy gb portrait">
-            <img src="thumb/gameboy_thumb.jpg" alt="GameBoy" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>GameBoy</h3>
-                <p><b>by JidunBlocks</b></p>
-                <p>Resolution: 240x320</p>
-                <p>Orientation: Portrait</p>
-                <a href="skins/gameboy.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="240x320 gba gameboy advance game portrait landscape console">
-            <img src="thumb/gba_thumb.jpg" alt="GameBoy Advance XD" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>GameBoy Advance XD</h3>
-                <p><b>by JidunBlocks</b></p>
-                <p>Resolution: 240x320</p>
-                <p>Orientation: Landscape+Portrait</p>
-                <div class="dropdown">
-                    <button class="download-btn">Download <i class="fa fa-caret-down"></i></button>
-                    <div class="dropdown-content">
-                        <a href="skins/gba_xd_l.png" download>Landscape</a>
-                        <a href="skins/gba_xd_p.png" download>Portrait</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="240x320 game console gameboy gb portrait">
-            <img src="thumb/gamewatch_thumb.jpg" alt="Game & Watch" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Game & Watch</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 320x240</p>
-                <p>Orientation: Landscape</p>
-                <a href="skins/gamewatch.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="240x320 game console gameboy gb portrait">
-            <img src="thumb/wolly_thumb.jpg" alt="Yoshi's Wolly World" class="thumbnail-img">
-            <div class="skin-info">
-                <h3>Yoshi's Wolly World</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 320x240</p>
-                <p>Orientation: Landscape</p>
-                <a href="skins/wolly.png" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="240x320 game console gameboy gb portrait">
-            <img src="thumb/ds5_thumb.jpg" alt="Yoshi's Wolly World" class="thumbnail-img">
-            <div class="skin-info">
-                <p><span class="new-label">NEW!</span></p>
-                <h3>DS5</h3>
-                <p><b>by <a href="https://www.facebook.com/dwiakhsan97">Dwi Akhsan</a></b></p>
-                <p>Resolution: 240x320</p>
-                <p>Orientation: Landscape</p>
-                <a href="https://www.facebook.com/groups/gamejavaid/permalink/2081995532294508/?mibextid=oFDknk&rdid=Y017BZKAuO98RbPQ&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2Fp%2F16ZtW1AR1C%2F%3Fmibextid%3DoFDknk" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="240x320 game console gameboy gb portrait">
-            <img src="thumb/150_2020_thumb.jpg" alt="Yoshi's Wolly World" class="thumbnail-img">
-            <div class="skin-info">
-                <p><span class="new-label">NEW!</span></p>
-                <h3>Nokia 150 (2020)</h3>
-                <p><b>by <a href="https://www.facebook.com/RezaRishaldi">Reza Rishaldi</a></b></p>
-                <p>Resolution: 240x320</p>
-                <p>Orientation: Portrait</p>
-                <a href="https://www.facebook.com/photo?fbid=3554991981304732&set=gm.2081599169000811&idorvanity=164177364076344" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="240x320 game console gameboy gb portrait">
-            <img src="thumb/5130_thumb.jpg" alt="Yoshi's Wolly World" class="thumbnail-img">
-            <div class="skin-info">
-                <p><span class="new-label">NEW!</span></p>
-                <h3>Nokia 5130 XpressMusic</h3>
-                <p><b>by <a href="https://www.facebook.com/share/16eGKncuRY/?mibextid=qi2Omg">Imam</a></b></p>
-                <p>Resolution: 240x320</p>
-                <p>Orientation: Portrait</p>
-                <a href="https://www.facebook.com/groups/gamejavaid/permalink/2081137179047010/?mibextid=oFDknk&rdid=RrT6s6fzuo5T0rof&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2Fp%2F1EkxQwgqFv%2F%3Fmibextid%3DoFDknk" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="240x320 game console gameboy gb portrait">
-            <img src="thumb/andromax4g_thumb.jpg" alt="Yoshi's Wolly World" class="thumbnail-img">
-            <div class="skin-info">
-                <p><span class="new-label">NEW!</span></p>
-                <h3>Andromax Prime</h3>
-                <p><b>by <a href="https://www.facebook.com/areyz.areyz.3/">Imam</a></b></p>
-                <p>Resolution: 240x320</p>
-                <p>Orientation: Portrait</p>
-                <a href="https://www.facebook.com/groups/gamejavaid/posts/1689637348196997" download class="download-btn">Download</a>
-            </div>
-        </div>
-        <div class="skin-card" data-tags="240x320 game console gameboy gb portrait">
-            <img src="thumb/215_thumb.jpg" alt="Yoshi's Wolly World" class="thumbnail-img">
-            <div class="skin-info">
-                <p><span class="new-label">NEW!</span></p>
-                <h3>Nokia 215</h3>
-                <p><b>by ArkadeNation29</b></p>
-                <p>Resolution: 240x320</p>
-                <p>Orientation: Portrait</p>
-                 <div class="dropdown">
-                    <button class="download-btn">Download <i class="fa fa-caret-down"></i></button>
-                    <div class="dropdown-content">
-                        <a href="skins/Nokia215_2015.png" download>Nokia 215 (2015)</a>
-                        <a href="skins/Nokia215_2020.png" download>Nokia 215 4G (2020)</a>
-                        <a href="skins/Nokia215_2024.png" download>Nokia 215 4G (2024)</a>
-            </div>
+
+        <div class="no-results" id="noResults" style="display: none;">
+            No skins found. Try different filters!
         </div>
     </div>
+
+    <div class="modal" id="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <img class="modal-image" id="modalImage" src="" alt="">
+            <div class="modal-info" id="modalInfo"></div>
+        </div>
     </div>
 
-    <canvas id="thumbnail-canvas"></canvas>
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const searchInput = document.getElementById('search-input');
-            const skinGrid = document.getElementById('skin-grid');
-            const skinCards = Array.from(document.querySelectorAll('.skin-card'));
-
-            // Sort skin cards by name
-            skinCards.sort((a, b) => {
-                const nameA = a.querySelector('.skin-info h3').textContent.toLowerCase();
-                const nameB = b.querySelector('.skin-info h3').textContent.toLowerCase();
-                return nameA.localeCompare(nameB);
-            });
-
-            // Append sorted skin cards back to the grid
-            skinCards.forEach(card => {
-                skinGrid.appendChild(card);
-            });
-
-            searchInput.addEventListener('input', function () {
-                const searchTerm = searchInput.value.toLowerCase();
-                skinCards.forEach(card => {
-                    const tags = card.getAttribute('data-tags').toLowerCase();
-                    const name = card.querySelector('.skin-info h3').textContent.toLowerCase();
-                    if (tags.includes(searchTerm) || name.includes(searchTerm)) {
-                        card.style.display = '';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-
-            // Simple view counter logic
-            const viewCounter = document.getElementById('view-counter');
-            const viewCount = document.getElementById('view-count');
-            let count = localStorage.getItem('viewCount') || 0;
-            count++;
-            localStorage.setItem('viewCount', count);
-            viewCount.textContent = count;
-        });
-    </script>
+    <script src="assets/script.js"></script>
 </body>
-
 </html>
