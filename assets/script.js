@@ -153,8 +153,15 @@
             if (abortController) abortController.abort();
             abortController = new AbortController();
 
-            const indexRes = await fetch('cards/_index.json', { signal: abortController.signal });
-            if (!indexRes.ok) throw new Error('Index not found');
+            // Try _index.json first (legacy), fallback to index.json (Jekyll-safe)
+            let indexRes;
+            try {
+                indexRes = await fetch('cards/_index.json', { signal: abortController.signal });
+                if (!indexRes.ok) throw new Error();
+            } catch {
+                indexRes = await fetch('cards/index.json', { signal: abortController.signal });
+                if (!indexRes.ok) throw new Error('Index not found');
+            }
             const indexData = await indexRes.json();
 
             const filenames = indexData.cards || [];
