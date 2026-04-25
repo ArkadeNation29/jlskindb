@@ -1,26 +1,19 @@
 /**
- * JL-Mod Skins Database v2.1 - Main Script
- * Compact dropdown filters + 2-col list view default
+ * JL-Mod Skins Database v2.2 - Minimalist Header
+ * Single bar layout: Brand | Search | Filter + Menu
  */
 
 (function() {
     'use strict';
 
-    // ============================
-    // Configuration
-    // ============================
     const CONFIG = {
         ITEMS_PER_PAGE: 12,
         BATCH_SIZE: 6,
         DEBOUNCE_MS: 300,
         LAZY_THRESHOLD: '50px',
-        SCROLL_TOP_THRESHOLD: 400,
         ONE_WEEK_MS: 7 * 24 * 60 * 60 * 1000,
     };
 
-    // ============================
-    // DOM Cache
-    // ============================
     const $ = (sel) => document.querySelector(sel);
     const $$ = (sel) => document.querySelectorAll(sel);
 
@@ -34,33 +27,35 @@
         errorState: $('#errorState'),
         statsText: $('#statsText'),
         modalOverlay: $('#modalOverlay'),
-        modalSheet: $('#modalSheet'),
         modalImage: $('#modalImage'),
-        modalImagePlaceholder: $('#modalImagePlaceholder'),
         modalBody: $('#modalBody'),
         modalClose: $('#modalClose'),
         backToTop: $('#backToTop'),
-        themeToggle: $('#themeToggle'),
-        viewToggle: $('#viewToggle'),
         toastContainer: $('#toastContainer'),
+        filterToggle: $('#filterToggle'),
+        filterPanel: $('#filterPanel'),
+        moreMenuToggle: $('#moreMenuToggle'),
+        moreMenu: $('#moreMenu'),
+        viewToggle: $('#viewToggle'),
+        viewToggleText: $('#viewToggleText'),
+        themeToggle: $('#themeToggle'),
+        themeToggleText: $('#themeToggleText'),
+        filterOrientation: $('#filterOrientation'),
+        filterCategory: $('#filterCategory'),
+        filterSort: $('#filterSort'),
+        filterCount: $('#filterCount'),
         resetFilters: $('#resetFilters'),
         resetEmpty: $('#resetEmpty'),
         retryLoad: $('#retryLoad'),
-        orientationValue: $('#orientationValue'),
-        categoryValue: $('#categoryValue'),
-        sortValue: $('#sortValue'),
     };
 
-    // ============================
-    // State
-    // ============================
     const state = {
         allSkins: [],
         filteredSkins: [],
         skinMap: new Map(),
         currentPage: 1,
         isLoading: false,
-        currentView: 'list', // DEFAULT: list view
+        currentView: 'list',
         filters: {
             search: '',
             orientation: 'all',
@@ -71,7 +66,6 @@
 
     let searchDebounceTimer = null;
     let abortController = null;
-    let openDropdown = null;
 
     // ============================
     // Intersection Observers
@@ -96,12 +90,7 @@
     }, { rootMargin: CONFIG.LAZY_THRESHOLD });
 
     const scrollTopObserver = new IntersectionObserver((entries) => {
-        const entry = entries[0];
-        if (entry.isIntersecting) {
-            els.backToTop.hidden = true;
-        } else {
-            els.backToTop.hidden = false;
-        }
+        els.backToTop.hidden = entries[0].isIntersecting;
     }, { threshold: 0 });
 
     // ============================
@@ -118,18 +107,10 @@
         return div.innerHTML;
     }
 
-    function formatDate(dateStr) {
-        if (!dateStr) return '';
-        const d = new Date(dateStr);
-        if (isNaN(d)) return dateStr;
-        return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
-    }
-
     function isNewSkin(skin) {
         if (skin.isNew) return true;
         if (!skin.dateAdded) return false;
-        const added = new Date(skin.dateAdded).getTime();
-        return Date.now() - added < CONFIG.ONE_WEEK_MS;
+        return Date.now() - new Date(skin.dateAdded).getTime() < CONFIG.ONE_WEEK_MS;
     }
 
     function showToast(message, duration = 3000) {
@@ -137,7 +118,6 @@
         toast.className = 'toast';
         toast.textContent = message;
         els.toastContainer.appendChild(toast);
-
         setTimeout(() => {
             toast.classList.add('toast-out');
             toast.addEventListener('animationend', () => toast.remove());
@@ -145,53 +125,61 @@
     }
 
     // ============================
-    // Dropdown Logic
+    // Panel / Menu Toggle Logic
     // ============================
-    function initDropdowns() {
-        $$('.filter-dropdown').forEach(dropdown => {
-            const trigger = dropdown.querySelector('.filter-dropdown-trigger');
-            const menu = dropdown.querySelector('.filter-dropdown-menu');
+    function togglePanel(panel, trigger, otherPanel, otherTrigger) {
+        const isHidden = panel.hidden;
 
-            trigger.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const isOpen = !menu.hidden;
+        // Close other if open
+        if (!otherPanel.hidden) {
+            otherPanel.hidden = true;
+            otherTrigger?.classList.remove('active');
+            otherTrigger?.setAttribute('aria-expanded', 'false');
+        }
 
-                // Close all others
-                closeAllDropdowns();
-
-                if (!isOpen) {
-                    menu.hidden = false;
-                    trigger.setAttribute('aria-expanded', 'true');
-                    openDropdown = dropdown;
-                }
-            });
-        });
-
-        document.addEventListener('click', () => {
-            closeAllDropdowns();
-        });
-    }
-
-    function closeAllDropdowns() {
-        $$('.filter-dropdown-menu').forEach(menu => {
-            menu.hidden = true;
-        });
-        $$('.filter-dropdown-trigger').forEach(trigger => {
+        if (isHidden) {
+            panel.hidden = false;
+            trigger.classList.add('active');
+            trigger.setAttribute('aria-expanded', 'true');
+        } else {
+            panel.hidden = true;
+            trigger.classList.remove('active');
             trigger.setAttribute('aria-expanded', 'false');
-        });
-        openDropdown = null;
+        }
     }
 
-    function updateDropdownUI(type, value, label) {
-        // Update value text
-        const valueEl = $(`#${type}Value`);
-        if (valueEl) valueEl.textContent = label;
+    function closeAllPanels() {
+        els.filterPanel.hidden = true;
+        els.filterToggle.classList.remove('active');
+        els.filterToggle.setAttribute('aria-expanded', 'false');
 
-        // Update active state in menu
-        $$(`.filter-dropdown-item[data-${type}]`).forEach(item => {
-            const isActive = item.dataset[type] === value;
-            item.classList.toggle('active', isActive);
-            item.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        els.moreMenu.hidden = true;
+        els.moreMenuToggle.classList.remove('active');
+        els.moreMenuToggle.setAttribute('aria-expanded', 'false');
+    }
+
+    function initPanels() {
+        els.filterToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            togglePanel(els.filterPanel, els.filterToggle, els.moreMenu, els.moreMenuToggle);
+        });
+
+        els.moreMenuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            togglePanel(els.moreMenu, els.moreMenuToggle, els.filterPanel, els.filterToggle);
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!els.filterPanel.contains(e.target) && !els.filterToggle.contains(e.target)) {
+                els.filterPanel.hidden = true;
+                els.filterToggle.classList.remove('active');
+                els.filterToggle.setAttribute('aria-expanded', 'false');
+            }
+            if (!els.moreMenu.contains(e.target) && !els.moreMenuToggle.contains(e.target)) {
+                els.moreMenu.hidden = true;
+                els.moreMenuToggle.classList.remove('active');
+                els.moreMenuToggle.setAttribute('aria-expanded', 'false');
+            }
         });
     }
 
@@ -216,11 +204,8 @@
                 if (!indexRes.ok) throw new Error('Index not found');
             }
             const indexData = await indexRes.json();
-
             const filenames = indexData.cards || [];
-            if (filenames.length === 0) {
-                throw new Error('No cards found');
-            }
+            if (filenames.length === 0) throw new Error('No cards found');
 
             const loaded = [];
             for (let i = 0; i < filenames.length; i += CONFIG.BATCH_SIZE) {
@@ -233,14 +218,11 @@
                         card._filename = filename;
                         return card;
                     } catch {
-                        console.warn(`Failed to load ${filename}`);
                         return null;
                     }
                 });
                 const batchResults = await Promise.all(batchPromises);
-                const valid = batchResults.filter(Boolean);
-                loaded.push(...valid);
-
+                loaded.push(...batchResults.filter(Boolean));
                 if (i + CONFIG.BATCH_SIZE < filenames.length) {
                     await new Promise(r => requestAnimationFrame(r));
                 }
@@ -250,9 +232,9 @@
             state.skinMap = new Map(loaded.map(s => [s.id, s]));
 
             $$('.skin-card.skeleton').forEach(el => el.remove());
-
             applyFilters();
             updateStats();
+            updateFilterCount();
 
         } catch (err) {
             console.error('Load error:', err);
@@ -287,16 +269,11 @@
 
         results.sort((a, b) => {
             switch (sort) {
-                case 'newest':
-                    return new Date(b.dateAdded || 0) - new Date(a.dateAdded || 0);
-                case 'oldest':
-                    return new Date(a.dateAdded || 0) - new Date(b.dateAdded || 0);
-                case 'name-asc':
-                    return (a.title || '').localeCompare(b.title || '');
-                case 'name-desc':
-                    return (b.title || '').localeCompare(a.title || '');
-                default:
-                    return 0;
+                case 'newest': return new Date(b.dateAdded || 0) - new Date(a.dateAdded || 0);
+                case 'oldest': return new Date(a.dateAdded || 0) - new Date(b.dateAdded || 0);
+                case 'name-asc': return (a.title || '').localeCompare(b.title || '');
+                case 'name-desc': return (b.title || '').localeCompare(a.title || '');
+                default: return 0;
             }
         });
 
@@ -313,10 +290,22 @@
         if (total === 0) {
             els.statsText.textContent = 'Loading skins...';
         } else if (showing === total) {
-            els.statsText.innerHTML = `<strong>${total}</strong> skins total · <strong>${newCount}</strong> new this week`;
+            els.statsText.innerHTML = `<strong>${total}</strong> skins · <strong>${newCount}</strong> new`;
         } else {
-            els.statsText.innerHTML = `Showing <strong>${showing}</strong> of <strong>${total}</strong> skins · <strong>${newCount}</strong> new this week`;
+            els.statsText.innerHTML = `<strong>${showing}</strong> / <strong>${total}</strong> skins · <strong>${newCount}</strong> new`;
         }
+    }
+
+    function updateFilterCount() {
+        const active = [];
+        if (state.filters.orientation !== 'all') active.push(state.filters.orientation);
+        if (state.filters.category !== 'all') active.push(state.filters.category);
+        if (state.filters.sort !== 'newest') active.push(state.filters.sort);
+        if (state.filters.search) active.push('search');
+
+        els.filterCount.textContent = active.length > 0
+            ? `${active.length} filter${active.length > 1 ? 's' : ''} active`
+            : 'No filters';
     }
 
     // ============================
@@ -346,8 +335,7 @@
 
         toShow.forEach(skin => {
             if (existingIds.has(skin.id)) return;
-            const card = createSkinCard(skin);
-            fragment.appendChild(card);
+            fragment.appendChild(createSkinCard(skin));
         });
 
         if (fragment.childNodes.length > 0) {
@@ -365,8 +353,7 @@
         if (hasMore) {
             els.loadMoreWrap.classList.add('visible');
             els.loadMoreBtn.disabled = false;
-            const remaining = filteredSkins.length - toShow.length;
-            els.loadMoreCount.textContent = `(${remaining} more)`;
+            els.loadMoreCount.textContent = `(${filteredSkins.length - toShow.length} more)`;
             els.loadMoreBtn.querySelector('.btn-text').textContent = 'Load More';
         } else if (filteredSkins.length > CONFIG.ITEMS_PER_PAGE) {
             els.loadMoreWrap.classList.add('visible');
@@ -495,19 +482,27 @@
         if (saved === 'light' || (!saved && !prefersDark)) {
             document.body.classList.add('light-mode');
         }
+        updateThemeUI();
 
         els.themeToggle.addEventListener('click', () => {
             document.body.classList.toggle('light-mode');
             const isLight = document.body.classList.contains('light-mode');
             localStorage.setItem('jlskin-theme', isLight ? 'light' : 'dark');
-            showToast(isLight ? 'Switched to light mode' : 'Switched to dark mode');
+            updateThemeUI();
+            showToast(isLight ? 'Light mode' : 'Dark mode');
         });
 
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
             if (!localStorage.getItem('jlskin-theme')) {
                 document.body.classList.toggle('light-mode', !e.matches);
+                updateThemeUI();
             }
         });
+    }
+
+    function updateThemeUI() {
+        const isLight = document.body.classList.contains('light-mode');
+        els.themeToggleText.textContent = isLight ? 'Light Mode' : 'Dark Mode';
     }
 
     // ============================
@@ -521,30 +516,59 @@
             const newView = state.currentView === 'grid' ? 'list' : 'grid';
             setView(newView);
             localStorage.setItem('jlskin-view', newView);
-            showToast(newView === 'list' ? 'List view enabled' : 'Grid view enabled');
+            updateViewUI();
+            showToast(newView === 'list' ? 'List view' : 'Grid view');
         });
     }
 
     function setView(view) {
         state.currentView = view;
         els.skinsGrid.setAttribute('data-view', view);
-        els.viewToggle.setAttribute('data-view', view);
+        document.body.setAttribute('data-view', view);
+    }
+
+    function updateViewUI() {
+        els.viewToggleText.textContent = state.currentView === 'list' ? 'List View' : 'Grid View';
     }
 
     // ============================
-    // Event Delegation & Handlers
+    // Filter Selects
+    // ============================
+    function initFilterSelects() {
+        els.filterOrientation.addEventListener('change', () => {
+            state.filters.orientation = els.filterOrientation.value;
+            applyFilters();
+            updateFilterCount();
+        });
+
+        els.filterCategory.addEventListener('change', () => {
+            state.filters.category = els.filterCategory.value;
+            applyFilters();
+            updateFilterCount();
+        });
+
+        els.filterSort.addEventListener('change', () => {
+            state.filters.sort = els.filterSort.value;
+            applyFilters();
+            updateFilterCount();
+        });
+    }
+
+    // ============================
+    // Event Listeners
     // ============================
     function initEventListeners() {
-        // Search with debounce
+        // Search
         els.searchInput.addEventListener('input', () => {
             clearTimeout(searchDebounceTimer);
             searchDebounceTimer = setTimeout(() => {
                 state.filters.search = els.searchInput.value;
                 applyFilters();
+                updateFilterCount();
             }, CONFIG.DEBOUNCE_MS);
         });
 
-        // Keyboard shortcut: Ctrl+K / Cmd+K
+        // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                 e.preventDefault();
@@ -555,51 +579,15 @@
                 if (!els.modalOverlay.hidden) {
                     closeModal();
                 } else {
-                    closeAllDropdowns();
+                    closeAllPanels();
                 }
             }
-        });
-
-        // Orientation dropdown
-        $$('.filter-dropdown-item[data-type="orientation"]').forEach(item => {
-            item.addEventListener('click', () => {
-                const value = item.dataset.filter;
-                const label = item.textContent;
-                state.filters.orientation = value;
-                updateDropdownUI('orientation', value, label);
-                closeAllDropdowns();
-                applyFilters();
-            });
-        });
-
-        // Category dropdown
-        $$('.filter-dropdown-item[data-category]').forEach(item => {
-            item.addEventListener('click', () => {
-                const value = item.dataset.category;
-                const label = item.textContent;
-                state.filters.category = value;
-                updateDropdownUI('category', value, label);
-                closeAllDropdowns();
-                applyFilters();
-            });
-        });
-
-        // Sort dropdown
-        $$('.filter-dropdown-item[data-sort]').forEach(item => {
-            item.addEventListener('click', () => {
-                const value = item.dataset.sort;
-                const label = item.textContent;
-                state.filters.sort = value;
-                updateDropdownUI('sort', value, label);
-                closeAllDropdowns();
-                applyFilters();
-            });
         });
 
         // Load more
         els.loadMoreBtn.addEventListener('click', loadMore);
 
-        // Modal close
+        // Modal
         els.modalClose.addEventListener('click', closeModal);
         els.modalOverlay.addEventListener('click', (e) => {
             if (e.target === els.modalOverlay) closeModal();
@@ -610,7 +598,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // Reset filters
+        // Reset
         els.resetFilters.addEventListener('click', resetAllFilters);
         els.resetEmpty.addEventListener('click', resetAllFilters);
         els.retryLoad.addEventListener('click', () => {
@@ -618,11 +606,9 @@
             loadAllSkins();
         });
 
-        // Scroll top observer
+        // Scroll observer
         const topSentinel = document.createElement('div');
-        topSentinel.style.position = 'absolute';
-        topSentinel.style.top = '0';
-        topSentinel.style.height = '1px';
+        topSentinel.style.cssText = 'position:absolute;top:0;height:1px;';
         document.body.prepend(topSentinel);
         scrollTopObserver.observe(topSentinel);
     }
@@ -630,12 +616,11 @@
     function resetAllFilters() {
         state.filters = { search: '', orientation: 'all', category: 'all', sort: 'newest' };
         els.searchInput.value = '';
-
-        updateDropdownUI('orientation', 'all', 'All');
-        updateDropdownUI('category', 'all', 'All Skins');
-        updateDropdownUI('sort', 'newest', 'Newest');
-
+        els.filterOrientation.value = 'all';
+        els.filterCategory.value = 'all';
+        els.filterSort.value = 'newest';
         applyFilters();
+        updateFilterCount();
         showToast('Filters reset');
     }
 
@@ -645,7 +630,8 @@
     function init() {
         initTheme();
         initViewToggle();
-        initDropdowns();
+        initPanels();
+        initFilterSelects();
         initEventListeners();
         loadAllSkins();
     }

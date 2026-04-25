@@ -15,149 +15,114 @@
 <body>
     <a href="#main-content" class="skip-link">Skip to content</a>
 
+    <!-- Minimalist Header -->
     <header class="site-header">
         <div class="header-inner">
-            <div class="brand">
+            <!-- Brand -->
+            <a href="./" class="brand" aria-label="JL-Mod Skins Home">
                 <span class="brand-icon" aria-hidden="true">🎮</span>
                 <div class="brand-text">
                     <h1>JL-Mod Skins</h1>
-                    <p class="brand-tagline">Find your perfect skin</p>
+                </div>
+            </a>
+
+            <!-- Search -->
+            <div class="header-search">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="search" id="searchInput" placeholder="Search skins..." autocomplete="off" aria-label="Search skins">
+            </div>
+
+            <!-- Actions -->
+            <div class="header-actions">
+                <!-- Filter Toggle -->
+                <button class="icon-btn" id="filterToggle" aria-label="Open filters" title="Filters">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+                </button>
+
+                <!-- More Menu Toggle -->
+                <button class="icon-btn" id="moreMenuToggle" aria-label="More options" title="More">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Filter Panel (dropdown) -->
+        <div class="filter-panel" id="filterPanel" hidden>
+            <div class="filter-panel-inner">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label for="filterOrientation">Orientation</label>
+                        <select id="filterOrientation" class="filter-select">
+                            <option value="all">All</option>
+                            <option value="portrait">Portrait</option>
+                            <option value="landscape">Landscape</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filterCategory">Category</label>
+                        <select id="filterCategory" class="filter-select">
+                            <option value="all">All Skins</option>
+                            <option value="device">📱 Device</option>
+                            <option value="game">🎮 Game</option>
+                            <option value="console">🕹️ Console</option>
+                            <option value="custom">✨ Custom</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filterSort">Sort</label>
+                        <select id="filterSort" class="filter-select">
+                            <option value="newest">Newest</option>
+                            <option value="oldest">Oldest</option>
+                            <option value="name-asc">Name A-Z</option>
+                            <option value="name-desc">Name Z-A</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-panel-footer">
+                    <button class="reset-btn-sm" id="resetFilters">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                        Reset
+                    </button>
+                    <span class="filter-count" id="filterCount"></span>
                 </div>
             </div>
-            <div class="header-actions">
-                <button class="view-toggle" id="viewToggle" aria-label="Toggle list view" title="Toggle view">
-                    <svg class="icon icon-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-                    <svg class="icon icon-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-                </button>
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                    <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                    <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-                </button>
-            </div>
+        </div>
+
+        <!-- More Menu (dropdown) -->
+        <div class="more-menu" id="moreMenu" hidden>
+            <button class="menu-item" id="viewToggle" aria-label="Toggle view">
+                <span class="menu-item-icon">
+                    <svg class="icon-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                    <svg class="icon-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                </span>
+                <span class="menu-item-text" id="viewToggleText">Grid View</span>
+            </button>
+            <button class="menu-item" id="themeToggle" aria-label="Toggle theme">
+                <span class="menu-item-icon">
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </span>
+                <span class="menu-item-text" id="themeToggleText">Dark Mode</span>
+            </button>
         </div>
     </header>
 
     <main id="main-content">
-        <section class="search-section" aria-label="Search and filter">
-            <div class="search-bar">
-                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="search" id="searchInput" placeholder="Search skins, authors, tags..." autocomplete="off" aria-label="Search skins">
-                <kbd class="search-shortcut">Ctrl K</kbd>
-            </div>
-
-            <!-- Compact Filter Bar -->
-            <div class="filter-bar-compact">
-                <div class="filter-dropdowns">
-                    <div class="filter-dropdown" id="orientationDropdown">
-                        <button class="filter-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
-                            <span class="filter-label">Orientation</span>
-                            <span class="filter-value" id="orientationValue">All</span>
-                            <svg class="filter-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-                        </button>
-                        <div class="filter-dropdown-menu" role="listbox" hidden>
-                            <button class="filter-dropdown-item active" role="option" data-filter="all" data-type="orientation" aria-selected="true">All</button>
-                            <button class="filter-dropdown-item" role="option" data-filter="portrait" data-type="orientation" aria-selected="false">Portrait</button>
-                            <button class="filter-dropdown-item" role="option" data-filter="landscape" data-type="orientation" aria-selected="false">Landscape</button>
-                        </div>
-                    </div>
-
-                    <div class="filter-dropdown" id="categoryDropdown">
-                        <button class="filter-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
-                            <span class="filter-label">Category</span>
-                            <span class="filter-value" id="categoryValue">All Skins</span>
-                            <svg class="filter-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-                        </button>
-                        <div class="filter-dropdown-menu" role="listbox" hidden>
-                            <button class="filter-dropdown-item active" role="option" data-category="all" aria-selected="true">All Skins</button>
-                            <button class="filter-dropdown-item" role="option" data-category="device" aria-selected="false">📱 Device</button>
-                            <button class="filter-dropdown-item" role="option" data-category="game" aria-selected="false">🎮 Game</button>
-                            <button class="filter-dropdown-item" role="option" data-category="console" aria-selected="false">🕹️ Console</button>
-                            <button class="filter-dropdown-item" role="option" data-category="custom" aria-selected="false">✨ Custom</button>
-                        </div>
-                    </div>
-
-                    <div class="filter-dropdown" id="sortDropdown">
-                        <button class="filter-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
-                            <span class="filter-label">Sort</span>
-                            <span class="filter-value" id="sortValue">Newest</span>
-                            <svg class="filter-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-                        </button>
-                        <div class="filter-dropdown-menu" role="listbox" hidden>
-                            <button class="filter-dropdown-item active" role="option" data-sort="newest" aria-selected="true">Newest First</button>
-                            <button class="filter-dropdown-item" role="option" data-sort="oldest" aria-selected="false">Oldest First</button>
-                            <button class="filter-dropdown-item" role="option" data-sort="name-asc" aria-selected="false">Name A-Z</button>
-                            <button class="filter-dropdown-item" role="option" data-sort="name-desc" aria-selected="false">Name Z-A</button>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="reset-filters-btn" id="resetFilters" title="Reset all filters" aria-label="Reset all filters">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                </button>
-            </div>
-        </section>
-
+        <!-- Stats -->
         <section class="stats-bar" aria-label="Statistics">
             <span id="statsText">Loading skins...</span>
         </section>
 
+        <!-- Results -->
         <section class="results-section" aria-label="Skin results">
             <div class="skins-grid" id="skinsGrid" role="list">
-                <!-- Skeleton placeholders -->
-                <article class="skin-card skeleton" role="listitem" aria-hidden="true">
-                    <div class="skeleton-image"></div>
-                    <div class="skeleton-body">
-                        <div class="skeleton-title"></div>
-                        <div class="skeleton-meta"></div>
-                        <div class="skeleton-tags"></div>
-                        <div class="skeleton-btn"></div>
-                    </div>
-                </article>
-                <article class="skin-card skeleton" role="listitem" aria-hidden="true">
-                    <div class="skeleton-image"></div>
-                    <div class="skeleton-body">
-                        <div class="skeleton-title"></div>
-                        <div class="skeleton-meta"></div>
-                        <div class="skeleton-tags"></div>
-                        <div class="skeleton-btn"></div>
-                    </div>
-                </article>
-                <article class="skin-card skeleton" role="listitem" aria-hidden="true">
-                    <div class="skeleton-image"></div>
-                    <div class="skeleton-body">
-                        <div class="skeleton-title"></div>
-                        <div class="skeleton-meta"></div>
-                        <div class="skeleton-tags"></div>
-                        <div class="skeleton-btn"></div>
-                    </div>
-                </article>
-                <article class="skin-card skeleton" role="listitem" aria-hidden="true">
-                    <div class="skeleton-image"></div>
-                    <div class="skeleton-body">
-                        <div class="skeleton-title"></div>
-                        <div class="skeleton-meta"></div>
-                        <div class="skeleton-tags"></div>
-                        <div class="skeleton-btn"></div>
-                    </div>
-                </article>
-                <article class="skin-card skeleton" role="listitem" aria-hidden="true">
-                    <div class="skeleton-image"></div>
-                    <div class="skeleton-body">
-                        <div class="skeleton-title"></div>
-                        <div class="skeleton-meta"></div>
-                        <div class="skeleton-tags"></div>
-                        <div class="skeleton-btn"></div>
-                    </div>
-                </article>
-                <article class="skin-card skeleton" role="listitem" aria-hidden="true">
-                    <div class="skeleton-image"></div>
-                    <div class="skeleton-body">
-                        <div class="skeleton-title"></div>
-                        <div class="skeleton-meta"></div>
-                        <div class="skeleton-tags"></div>
-                        <div class="skeleton-btn"></div>
-                    </div>
-                </article>
+                <!-- Skeletons -->
+                <article class="skin-card skeleton" role="listitem" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-title"></div><div class="skeleton-meta"></div><div class="skeleton-tags"></div><div class="skeleton-btn"></div></div></article>
+                <article class="skin-card skeleton" role="listitem" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-title"></div><div class="skeleton-meta"></div><div class="skeleton-tags"></div><div class="skeleton-btn"></div></div></article>
+                <article class="skin-card skeleton" role="listitem" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-title"></div><div class="skeleton-meta"></div><div class="skeleton-tags"></div><div class="skeleton-btn"></div></div></article>
+                <article class="skin-card skeleton" role="listitem" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-title"></div><div class="skeleton-meta"></div><div class="skeleton-tags"></div><div class="skeleton-btn"></div></div></article>
+                <article class="skin-card skeleton" role="listitem" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-title"></div><div class="skeleton-meta"></div><div class="skeleton-tags"></div><div class="skeleton-btn"></div></div></article>
+                <article class="skin-card skeleton" role="listitem" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-title"></div><div class="skeleton-meta"></div><div class="skeleton-tags"></div><div class="skeleton-btn"></div></div></article>
             </div>
 
             <div class="load-more-wrap" id="loadMoreWrap">
