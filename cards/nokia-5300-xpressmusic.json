@@ -1,0 +1,21 @@
+{
+  "title": "Nokia 5300 XpressMusic",
+  "author": "ArkadeNation29",
+  "resolution": "240x320",
+  "orientation": "portrait",
+  "thumbnail": "thumb/5300_thumb.jpg",
+  "download": "skins/Nokia5300XpressMusic.png",
+  "tags": [
+    "nokia",
+    "portrait",
+    "240x320",
+    "xpressmusic",
+    "5300"
+  ],
+  "description": "",
+  "id": "nokia-5300-xpressmusic",
+  "category": "device",
+  "isNew": false,
+  "dateAdded": "",
+  "downloads": 0
+}

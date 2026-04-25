@@ -1,0 +1,21 @@
+{
+  "title": "Nokia 6300 4G",
+  "author": "ArkadeNation29",
+  "resolution": "240x320",
+  "orientation": "portrait",
+  "thumbnail": "thumb/6300_thumb.jpg",
+  "download": "skins/Nokia6300.png",
+  "tags": [
+    "nokia",
+    "portrait",
+    "240x320",
+    "6300",
+    "4g"
+  ],
+  "description": "",
+  "id": "nokia-6300-4g",
+  "category": "device",
+  "isNew": false,
+  "dateAdded": "",
+  "downloads": 0
+}

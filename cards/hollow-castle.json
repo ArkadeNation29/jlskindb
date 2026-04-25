@@ -1,0 +1,21 @@
+{
+  "title": "Hollow Castle",
+  "author": "ArkadeNation29",
+  "resolution": "240x320",
+  "orientation": "portrait",
+  "thumbnail": "thumb/hollow_thumb.jpg",
+  "download": "skins/KIMGOC_HollowCastle.png",
+  "tags": [
+    "game",
+    "portrait",
+    "240x320",
+    "hollow",
+    "castle"
+  ],
+  "description": "",
+  "id": "hollow-castle",
+  "category": "game",
+  "isNew": false,
+  "dateAdded": "",
+  "downloads": 0
+}

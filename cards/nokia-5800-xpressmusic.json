@@ -1,0 +1,21 @@
+{
+  "title": "Nokia 5800 XpressMusic",
+  "author": "ArkadeNation29",
+  "resolution": "360x640",
+  "orientation": "landscape",
+  "thumbnail": "thumb/5800_thumb.jpg",
+  "download": "skins/Nokia5800.png",
+  "tags": [
+    "nokia",
+    "landscape",
+    "360x640",
+    "xpressmusic",
+    "5800"
+  ],
+  "description": "",
+  "id": "nokia-5800-xpressmusic",
+  "category": "device",
+  "isNew": false,
+  "dateAdded": "",
+  "downloads": 0
+}

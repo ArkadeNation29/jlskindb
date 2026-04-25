@@ -1,0 +1,23 @@
+{
+  "title": "GameBoy Advance XD",
+  "author": "JidunBlocks",
+  "resolution": "240x320",
+  "orientation": "both",
+  "thumbnail": "thumb/gba_thumb.jpg",
+  "download": "skins/gba_xd_l.png",
+  "tags": [
+    "240x320",
+    "gba",
+    "gameboy advance",
+    "game",
+    "portrait",
+    "landscape",
+    "console"
+  ],
+  "description": "Also available in Portrait mode: skins/gba_xd_p.png",
+  "id": "gameboy-advance-xd",
+  "category": "game",
+  "isNew": false,
+  "dateAdded": "",
+  "downloads": 0
+}

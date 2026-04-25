@@ -1,0 +1,23 @@
+{
+  "title": "WhatsPad",
+  "author": "JidunBlocks",
+  "resolution": "240x320",
+  "orientation": "landscape",
+  "thumbnail": "thumb/whatspad_thumb.jpg",
+  "download": "skins/Whatpad.png",
+  "tags": [
+    "240x320",
+    "landscape",
+    "wa",
+    "whatsapp",
+    "whatpad",
+    "app",
+    "apk"
+  ],
+  "description": "",
+  "id": "whatspad",
+  "category": "custom",
+  "isNew": false,
+  "dateAdded": "",
+  "downloads": 0
+}

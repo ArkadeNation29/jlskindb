@@ -1,0 +1,22 @@
+{
+  "title": "GameBoy",
+  "author": "JidunBlocks",
+  "resolution": "240x320",
+  "orientation": "portrait",
+  "thumbnail": "thumb/gameboy_thumb.jpg",
+  "download": "skins/gameboy.png",
+  "tags": [
+    "240x320",
+    "game",
+    "console",
+    "gameboy",
+    "gb",
+    "portrait"
+  ],
+  "description": "",
+  "id": "gameboy",
+  "category": "game",
+  "isNew": false,
+  "dateAdded": "",
+  "downloads": 0
+}

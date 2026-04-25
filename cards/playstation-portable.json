@@ -1,0 +1,23 @@
+{
+  "title": "Playstation Portable",
+  "author": "ArkadeNation29",
+  "resolution": "320x240",
+  "orientation": "landscape",
+  "thumbnail": "thumb/psp_thumb.jpg",
+  "download": "skins/psp.png",
+  "tags": [
+    "320x240",
+    "landscape",
+    "game",
+    "console",
+    "psp",
+    "playstation",
+    "portable"
+  ],
+  "description": "",
+  "id": "playstation-portable",
+  "category": "game",
+  "isNew": false,
+  "dateAdded": "",
+  "downloads": 0
+}

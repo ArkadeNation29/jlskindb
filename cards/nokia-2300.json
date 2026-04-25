@@ -1,0 +1,20 @@
+{
+  "title": "Nokia 2300",
+  "author": "ArkadeNation29",
+  "resolution": "96x65",
+  "orientation": "portrait",
+  "thumbnail": "thumb/2300_thumb.jpg",
+  "download": "skins/Nokia2300.png",
+  "tags": [
+    "nokia",
+    "portrait",
+    "96x65",
+    "2300"
+  ],
+  "description": "",
+  "id": "nokia-2300",
+  "category": "device",
+  "isNew": false,
+  "dateAdded": "",
+  "downloads": 0
+}

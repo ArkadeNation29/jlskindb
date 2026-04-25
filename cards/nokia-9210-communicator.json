@@ -1,0 +1,22 @@
+{
+  "title": "Nokia 9210 Communicator",
+  "author": "ArkadeNation29",
+  "resolution": "80x48",
+  "orientation": "portrait",
+  "thumbnail": "thumb/9210_thumb.jpg",
+  "download": "skins/Nokia9210Communicator.png",
+  "tags": [
+    "nokia",
+    "portrait",
+    "80x48",
+    "96x65",
+    "communicator",
+    "9210"
+  ],
+  "description": "",
+  "id": "nokia-9210-communicator",
+  "category": "device",
+  "isNew": false,
+  "dateAdded": "",
+  "downloads": 0
+}

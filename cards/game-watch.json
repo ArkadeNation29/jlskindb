@@ -1,0 +1,21 @@
+{
+  "title": "Game & Watch",
+  "author": "ArkadeNation29",
+  "resolution": "320x240",
+  "orientation": "landscape",
+  "thumbnail": "thumb/gamewatch_thumb.jpg",
+  "download": "skins/gamewatch.png",
+  "tags": [
+    "320x240",
+    "game",
+    "console",
+    "game & watch",
+    "landscape"
+  ],
+  "description": "",
+  "id": "game-watch",
+  "category": "game",
+  "isNew": false,
+  "dateAdded": "",
+  "downloads": 0
+}

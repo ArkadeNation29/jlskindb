@@ -1,0 +1,23 @@
+{
+  "title": "Yoshi's Wolly World",
+  "author": "ArkadeNation29",
+  "resolution": "320x240",
+  "orientation": "landscape",
+  "thumbnail": "thumb/wolly_thumb.jpg",
+  "download": "skins/wolly.png",
+  "tags": [
+    "320x240",
+    "game",
+    "console",
+    "yoshi",
+    "wolly",
+    "world",
+    "landscape"
+  ],
+  "description": "",
+  "id": "yoshi-s-wolly-world",
+  "category": "game",
+  "isNew": false,
+  "dateAdded": "",
+  "downloads": 0
+}
