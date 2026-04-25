@@ -11,7 +11,6 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preload" href="assets/style.css" as="style">
     <link rel="stylesheet" href="assets/style.css">
-<base target="_blank">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to content</a>
@@ -46,30 +45,56 @@
                 <kbd class="search-shortcut">Ctrl K</kbd>
             </div>
 
-            <div class="filter-bar">
-                <div class="filter-group orientation-filters" role="group" aria-label="Orientation filter">
-                    <button class="filter-chip" data-filter="all" data-type="orientation" aria-pressed="true">All</button>
-                    <button class="filter-chip" data-filter="portrait" data-type="orientation" aria-pressed="false">Portrait</button>
-                    <button class="filter-chip" data-filter="landscape" data-type="orientation" aria-pressed="false">Landscape</button>
-                </div>
-                <div class="filter-group sort-group">
-                    <label for="sortSelect" class="visually-hidden">Sort by</label>
-                    <select id="sortSelect" class="sort-select">
-                        <option value="newest">Newest First</option>
-                        <option value="oldest">Oldest First</option>
-                        <option value="name-asc">Name A-Z</option>
-                        <option value="name-desc">Name Z-A</option>
-                    </select>
-                </div>
-            </div>
+            <!-- Compact Filter Bar -->
+            <div class="filter-bar-compact">
+                <div class="filter-dropdowns">
+                    <div class="filter-dropdown" id="orientationDropdown">
+                        <button class="filter-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
+                            <span class="filter-label">Orientation</span>
+                            <span class="filter-value" id="orientationValue">All</span>
+                            <svg class="filter-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="filter-dropdown-menu" role="listbox" hidden>
+                            <button class="filter-dropdown-item active" role="option" data-filter="all" data-type="orientation" aria-selected="true">All</button>
+                            <button class="filter-dropdown-item" role="option" data-filter="portrait" data-type="orientation" aria-selected="false">Portrait</button>
+                            <button class="filter-dropdown-item" role="option" data-filter="landscape" data-type="orientation" aria-selected="false">Landscape</button>
+                        </div>
+                    </div>
 
-            <nav class="category-nav" aria-label="Categories">
-                <button class="category-pill active" data-category="all">All Skins</button>
-                <button class="category-pill" data-category="device">📱 Device</button>
-                <button class="category-pill" data-category="game">🎮 Game</button>
-                <button class="category-pill" data-category="console">🕹️ Console</button>
-                <button class="category-pill" data-category="custom">✨ Custom</button>
-            </nav>
+                    <div class="filter-dropdown" id="categoryDropdown">
+                        <button class="filter-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
+                            <span class="filter-label">Category</span>
+                            <span class="filter-value" id="categoryValue">All Skins</span>
+                            <svg class="filter-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="filter-dropdown-menu" role="listbox" hidden>
+                            <button class="filter-dropdown-item active" role="option" data-category="all" aria-selected="true">All Skins</button>
+                            <button class="filter-dropdown-item" role="option" data-category="device" aria-selected="false">📱 Device</button>
+                            <button class="filter-dropdown-item" role="option" data-category="game" aria-selected="false">🎮 Game</button>
+                            <button class="filter-dropdown-item" role="option" data-category="console" aria-selected="false">🕹️ Console</button>
+                            <button class="filter-dropdown-item" role="option" data-category="custom" aria-selected="false">✨ Custom</button>
+                        </div>
+                    </div>
+
+                    <div class="filter-dropdown" id="sortDropdown">
+                        <button class="filter-dropdown-trigger" aria-haspopup="listbox" aria-expanded="false">
+                            <span class="filter-label">Sort</span>
+                            <span class="filter-value" id="sortValue">Newest</span>
+                            <svg class="filter-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="filter-dropdown-menu" role="listbox" hidden>
+                            <button class="filter-dropdown-item active" role="option" data-sort="newest" aria-selected="true">Newest First</button>
+                            <button class="filter-dropdown-item" role="option" data-sort="oldest" aria-selected="false">Oldest First</button>
+                            <button class="filter-dropdown-item" role="option" data-sort="name-asc" aria-selected="false">Name A-Z</button>
+                            <button class="filter-dropdown-item" role="option" data-sort="name-desc" aria-selected="false">Name Z-A</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="reset-filters-btn" id="resetFilters" title="Reset all filters" aria-label="Reset all filters">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                </button>
+            </div>
         </section>
 
         <section class="stats-bar" aria-label="Statistics">
@@ -146,13 +171,13 @@
                 <div class="empty-icon">🔍</div>
                 <h2>No skins found</h2>
                 <p>Try adjusting your search or filters</p>
-                <button class="reset-btn" id="resetFilters">Reset all filters</button>
+                <button class="reset-btn" id="resetEmpty">Reset all filters</button>
             </div>
 
             <div class="error-state" id="errorState" hidden>
                 <div class="empty-icon">⚠️</div>
                 <h2>Failed to load skins</h2>
-                <p>Make sure <code>cards/_index.json</code> exists and is accessible</p>
+                <p>Make sure <code>cards/index.json</code> exists and is accessible</p>
                 <button class="reset-btn" id="retryLoad">Try Again</button>
             </div>
         </section>
@@ -183,4 +208,3 @@
     <script src="assets/script.js" defer></script>
 </body>
 </html>
-l

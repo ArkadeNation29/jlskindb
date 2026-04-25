@@ -1,6 +1,6 @@
 /**
- * JL-Mod Skins Database v2 - Main Script
- * Refactored for performance, accessibility, and UX
+ * JL-Mod Skins Database v2.1 - Main Script
+ * Compact dropdown filters + 2-col list view default
  */
 
 (function() {
@@ -42,10 +42,13 @@
         backToTop: $('#backToTop'),
         themeToggle: $('#themeToggle'),
         viewToggle: $('#viewToggle'),
-        sortSelect: $('#sortSelect'),
         toastContainer: $('#toastContainer'),
         resetFilters: $('#resetFilters'),
+        resetEmpty: $('#resetEmpty'),
         retryLoad: $('#retryLoad'),
+        orientationValue: $('#orientationValue'),
+        categoryValue: $('#categoryValue'),
+        sortValue: $('#sortValue'),
     };
 
     // ============================
@@ -57,7 +60,7 @@
         skinMap: new Map(),
         currentPage: 1,
         isLoading: false,
-        currentView: 'grid',
+        currentView: 'list', // DEFAULT: list view
         filters: {
             search: '',
             orientation: 'all',
@@ -68,6 +71,7 @@
 
     let searchDebounceTimer = null;
     let abortController = null;
+    let openDropdown = null;
 
     // ============================
     // Intersection Observers
@@ -141,6 +145,57 @@
     }
 
     // ============================
+    // Dropdown Logic
+    // ============================
+    function initDropdowns() {
+        $$('.filter-dropdown').forEach(dropdown => {
+            const trigger = dropdown.querySelector('.filter-dropdown-trigger');
+            const menu = dropdown.querySelector('.filter-dropdown-menu');
+
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = !menu.hidden;
+
+                // Close all others
+                closeAllDropdowns();
+
+                if (!isOpen) {
+                    menu.hidden = false;
+                    trigger.setAttribute('aria-expanded', 'true');
+                    openDropdown = dropdown;
+                }
+            });
+        });
+
+        document.addEventListener('click', () => {
+            closeAllDropdowns();
+        });
+    }
+
+    function closeAllDropdowns() {
+        $$('.filter-dropdown-menu').forEach(menu => {
+            menu.hidden = true;
+        });
+        $$('.filter-dropdown-trigger').forEach(trigger => {
+            trigger.setAttribute('aria-expanded', 'false');
+        });
+        openDropdown = null;
+    }
+
+    function updateDropdownUI(type, value, label) {
+        // Update value text
+        const valueEl = $(`#${type}Value`);
+        if (valueEl) valueEl.textContent = label;
+
+        // Update active state in menu
+        $$(`.filter-dropdown-item[data-${type}]`).forEach(item => {
+            const isActive = item.dataset[type] === value;
+            item.classList.toggle('active', isActive);
+            item.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+    }
+
+    // ============================
     // Skin Loading
     // ============================
     async function loadAllSkins() {
@@ -149,11 +204,9 @@
         els.errorState.hidden = true;
 
         try {
-            // Abort previous if any
             if (abortController) abortController.abort();
             abortController = new AbortController();
 
-            // Try _index.json first (legacy), fallback to index.json (Jekyll-safe)
             let indexRes;
             try {
                 indexRes = await fetch('cards/_index.json', { signal: abortController.signal });
@@ -169,7 +222,6 @@
                 throw new Error('No cards found');
             }
 
-            // Load in batches to avoid blocking
             const loaded = [];
             for (let i = 0; i < filenames.length; i += CONFIG.BATCH_SIZE) {
                 const batch = filenames.slice(i, i + CONFIG.BATCH_SIZE);
@@ -189,7 +241,6 @@
                 const valid = batchResults.filter(Boolean);
                 loaded.push(...valid);
 
-                // Yield to browser between batches
                 if (i + CONFIG.BATCH_SIZE < filenames.length) {
                     await new Promise(r => requestAnimationFrame(r));
                 }
@@ -198,7 +249,6 @@
             state.allSkins = loaded;
             state.skinMap = new Map(loaded.map(s => [s.id, s]));
 
-            // Remove skeletons
             $$('.skin-card.skeleton').forEach(el => el.remove());
 
             applyFilters();
@@ -235,7 +285,6 @@
             return matchSearch && matchOrientation && matchCategory;
         });
 
-        // Sort
         results.sort((a, b) => {
             switch (sort) {
                 case 'newest':
@@ -288,7 +337,6 @@
 
         els.emptyState.hidden = true;
 
-        // Use DocumentFragment for batch insert
         const fragment = document.createDocumentFragment();
         const existingIds = new Set(
             Array.from(els.skinsGrid.children)
@@ -306,7 +354,6 @@
             els.skinsGrid.appendChild(fragment);
         }
 
-        // Remove excess cards if filter narrowed
         const visibleIds = new Set(toShow.map(s => s.id));
         Array.from(els.skinsGrid.children).forEach(el => {
             if (!el.classList.contains('skeleton') && !visibleIds.has(el.dataset.id)) {
@@ -314,13 +361,13 @@
             }
         });
 
-        // Load more button
         const hasMore = toShow.length < filteredSkins.length;
         if (hasMore) {
             els.loadMoreWrap.classList.add('visible');
             els.loadMoreBtn.disabled = false;
             const remaining = filteredSkins.length - toShow.length;
             els.loadMoreCount.textContent = `(${remaining} more)`;
+            els.loadMoreBtn.querySelector('.btn-text').textContent = 'Load More';
         } else if (filteredSkins.length > CONFIG.ITEMS_PER_PAGE) {
             els.loadMoreWrap.classList.add('visible');
             els.loadMoreBtn.disabled = true;
@@ -373,11 +420,9 @@
             </div>
         `;
 
-        // Lazy load image
         const img = article.querySelector('.skin-image[data-src]');
         if (img) lazyImageObserver.observe(img);
 
-        // Click handler
         article.addEventListener('click', () => openModal(skin.id));
         article.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -392,7 +437,6 @@
     function loadMore() {
         state.currentPage++;
         renderSkins();
-        // Scroll to first newly added card
         const cards = els.skinsGrid.querySelectorAll('.skin-card:not(.skeleton)');
         const firstNew = cards[(state.currentPage - 1) * CONFIG.ITEMS_PER_PAGE];
         if (firstNew) {
@@ -433,8 +477,6 @@
 
         els.modalOverlay.hidden = false;
         document.body.style.overflow = 'hidden';
-
-        // Focus trap
         els.modalClose.focus();
     }
 
@@ -461,7 +503,6 @@
             showToast(isLight ? 'Switched to light mode' : 'Switched to dark mode');
         });
 
-        // Listen to system preference changes
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
             if (!localStorage.getItem('jlskin-theme')) {
                 document.body.classList.toggle('light-mode', !e.matches);
@@ -473,7 +514,7 @@
     // View Toggle
     // ============================
     function initViewToggle() {
-        const savedView = localStorage.getItem('jlskin-view') || 'grid';
+        const savedView = localStorage.getItem('jlskin-view') || 'list';
         setView(savedView);
 
         els.viewToggle.addEventListener('click', () => {
@@ -510,39 +551,49 @@
                 els.searchInput.focus();
                 els.searchInput.select();
             }
-            if (e.key === 'Escape' && !els.modalOverlay.hidden) {
-                closeModal();
+            if (e.key === 'Escape') {
+                if (!els.modalOverlay.hidden) {
+                    closeModal();
+                } else {
+                    closeAllDropdowns();
+                }
             }
         });
 
-        // Orientation filters
-        document.querySelectorAll('.filter-chip[data-type="orientation"]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-chip[data-type="orientation"]').forEach(b => {
-                    b.setAttribute('aria-pressed', 'false');
-                    b.classList.remove('active');
-                });
-                btn.setAttribute('aria-pressed', 'true');
-                btn.classList.add('active');
-                state.filters.orientation = btn.dataset.filter;
+        // Orientation dropdown
+        $$('.filter-dropdown-item[data-type="orientation"]').forEach(item => {
+            item.addEventListener('click', () => {
+                const value = item.dataset.filter;
+                const label = item.textContent;
+                state.filters.orientation = value;
+                updateDropdownUI('orientation', value, label);
+                closeAllDropdowns();
                 applyFilters();
             });
         });
 
-        // Category filters
-        document.querySelectorAll('.category-pill').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.category-pill').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                state.filters.category = btn.dataset.category;
+        // Category dropdown
+        $$('.filter-dropdown-item[data-category]').forEach(item => {
+            item.addEventListener('click', () => {
+                const value = item.dataset.category;
+                const label = item.textContent;
+                state.filters.category = value;
+                updateDropdownUI('category', value, label);
+                closeAllDropdowns();
                 applyFilters();
             });
         });
 
-        // Sort
-        els.sortSelect.addEventListener('change', () => {
-            state.filters.sort = els.sortSelect.value;
-            applyFilters();
+        // Sort dropdown
+        $$('.filter-dropdown-item[data-sort]').forEach(item => {
+            item.addEventListener('click', () => {
+                const value = item.dataset.sort;
+                const label = item.textContent;
+                state.filters.sort = value;
+                updateDropdownUI('sort', value, label);
+                closeAllDropdowns();
+                applyFilters();
+            });
         });
 
         // Load more
@@ -561,6 +612,7 @@
 
         // Reset filters
         els.resetFilters.addEventListener('click', resetAllFilters);
+        els.resetEmpty.addEventListener('click', resetAllFilters);
         els.retryLoad.addEventListener('click', () => {
             els.errorState.hidden = true;
             loadAllSkins();
@@ -578,16 +630,10 @@
     function resetAllFilters() {
         state.filters = { search: '', orientation: 'all', category: 'all', sort: 'newest' };
         els.searchInput.value = '';
-        els.sortSelect.value = 'newest';
 
-        document.querySelectorAll('.filter-chip[data-type="orientation"]').forEach(b => {
-            b.setAttribute('aria-pressed', b.dataset.filter === 'all' ? 'true' : 'false');
-            b.classList.toggle('active', b.dataset.filter === 'all');
-        });
-
-        document.querySelectorAll('.category-pill').forEach(b => {
-            b.classList.toggle('active', b.dataset.category === 'all');
-        });
+        updateDropdownUI('orientation', 'all', 'All');
+        updateDropdownUI('category', 'all', 'All Skins');
+        updateDropdownUI('sort', 'newest', 'Newest');
 
         applyFilters();
         showToast('Filters reset');
@@ -599,6 +645,7 @@
     function init() {
         initTheme();
         initViewToggle();
+        initDropdowns();
         initEventListeners();
         loadAllSkins();
     }
