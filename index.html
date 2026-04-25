@@ -1,88 +1,185 @@
-<!-- index.html - Main file (lightweight!) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="dark light">
+    <meta name="description" content="JL-Mod Skins Database - Find and download the best JL-Mod skins for your J2ME emulator.">
+    <meta name="theme-color" content="#0f0f0f" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f5f5f5" media="(prefers-color-scheme: light)">
     <title>JL-Mod Skins Database</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preload" href="assets/style.css" as="style">
     <link rel="stylesheet" href="assets/style.css">
+<base target="_blank">
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <div>
-                <h1>🎮 JL-Mod Skins Database</h1>
-                <p class="tagline">Effortlessly Find Your Perfect JL-Mod Skins</p>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="brand">
+                <span class="brand-icon" aria-hidden="true">🎮</span>
+                <div class="brand-text">
+                    <h1>JL-Mod Skins</h1>
+                    <p class="brand-tagline">Find your perfect skin</p>
+                </div>
             </div>
-            <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+            <div class="header-actions">
+                <button class="view-toggle" id="viewToggle" aria-label="Toggle list view" title="Toggle view">
+                    <svg class="icon icon-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                    <svg class="icon icon-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                </button>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </button>
+            </div>
         </div>
     </header>
 
-    <div class="stats">
-        <div class="stat-card">
-            <div class="stat-number" id="totalSkins">0</div>
-            <div class="stat-label">Total Skins</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number" id="showingCount">0</div>
-            <div class="stat-label">Showing</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number" id="newCount">0</div>
-            <div class="stat-label">New This Week</div>
-        </div>
-    </div>
-
-    <div class="controls">
-        <div class="search-filter">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="🔍 Search skins..." onkeyup="filterSkins()">
+    <main id="main-content">
+        <section class="search-section" aria-label="Search and filter">
+            <div class="search-bar">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="search" id="searchInput" placeholder="Search skins, authors, tags..." autocomplete="off" aria-label="Search skins">
+                <kbd class="search-shortcut">Ctrl K</kbd>
             </div>
-            <div class="filter-group">
-                <button class="filter-btn" data-filter="portrait" onclick="toggleFilter(this, 'orientation')">Portrait</button>
-                <button class="filter-btn" data-filter="landscape" onclick="toggleFilter(this, 'orientation')">Landscape</button>
+
+            <div class="filter-bar">
+                <div class="filter-group orientation-filters" role="group" aria-label="Orientation filter">
+                    <button class="filter-chip" data-filter="all" data-type="orientation" aria-pressed="true">All</button>
+                    <button class="filter-chip" data-filter="portrait" data-type="orientation" aria-pressed="false">Portrait</button>
+                    <button class="filter-chip" data-filter="landscape" data-type="orientation" aria-pressed="false">Landscape</button>
+                </div>
+                <div class="filter-group sort-group">
+                    <label for="sortSelect" class="visually-hidden">Sort by</label>
+                    <select id="sortSelect" class="sort-select">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="name-asc">Name A-Z</option>
+                        <option value="name-desc">Name Z-A</option>
+                    </select>
+                </div>
             </div>
-        </div>
 
-        <div class="category-tabs">
-            <button class="category-tab active" onclick="filterCategory('all')">All Skins</button>
-            <button class="category-tab" onclick="filterCategory('device')">📱 Device Skins</button>
-            <button class="category-tab" onclick="filterCategory('game')">🎮 Game Skins</button>
-            <button class="category-tab" onclick="filterCategory('console')">🕹️ Console Skins</button>
-            <button class="category-tab" onclick="filterCategory('custom')">✨ Custom Themes</button>
-        </div>
-    </div>
+            <nav class="category-nav" aria-label="Categories">
+                <button class="category-pill active" data-category="all">All Skins</button>
+                <button class="category-pill" data-category="device">📱 Device</button>
+                <button class="category-pill" data-category="game">🎮 Game</button>
+                <button class="category-pill" data-category="console">🕹️ Console</button>
+                <button class="category-pill" data-category="custom">✨ Custom</button>
+            </nav>
+        </section>
 
-    <div class="container">
-        <div id="loadingState" class="loading">
-            <div class="spinner"></div>
-            <p>Loading skins...</p>
-        </div>
+        <section class="stats-bar" aria-label="Statistics">
+            <span id="statsText">Loading skins...</span>
+        </section>
 
-        <div class="skins-grid" id="skinsGrid"></div>
-        
-        <div class="load-more-section" id="loadMoreSection">
-            <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()">
-                <span>⬇️ Load More Skins</span>
+        <section class="results-section" aria-label="Skin results">
+            <div class="skins-grid" id="skinsGrid" role="list">
+                <!-- Skeleton placeholders -->
+                <article class="skin-card skeleton" role="listitem" aria-hidden="true">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-body">
+                        <div class="skeleton-title"></div>
+                        <div class="skeleton-meta"></div>
+                        <div class="skeleton-tags"></div>
+                        <div class="skeleton-btn"></div>
+                    </div>
+                </article>
+                <article class="skin-card skeleton" role="listitem" aria-hidden="true">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-body">
+                        <div class="skeleton-title"></div>
+                        <div class="skeleton-meta"></div>
+                        <div class="skeleton-tags"></div>
+                        <div class="skeleton-btn"></div>
+                    </div>
+                </article>
+                <article class="skin-card skeleton" role="listitem" aria-hidden="true">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-body">
+                        <div class="skeleton-title"></div>
+                        <div class="skeleton-meta"></div>
+                        <div class="skeleton-tags"></div>
+                        <div class="skeleton-btn"></div>
+                    </div>
+                </article>
+                <article class="skin-card skeleton" role="listitem" aria-hidden="true">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-body">
+                        <div class="skeleton-title"></div>
+                        <div class="skeleton-meta"></div>
+                        <div class="skeleton-tags"></div>
+                        <div class="skeleton-btn"></div>
+                    </div>
+                </article>
+                <article class="skin-card skeleton" role="listitem" aria-hidden="true">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-body">
+                        <div class="skeleton-title"></div>
+                        <div class="skeleton-meta"></div>
+                        <div class="skeleton-tags"></div>
+                        <div class="skeleton-btn"></div>
+                    </div>
+                </article>
+                <article class="skin-card skeleton" role="listitem" aria-hidden="true">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-body">
+                        <div class="skeleton-title"></div>
+                        <div class="skeleton-meta"></div>
+                        <div class="skeleton-tags"></div>
+                        <div class="skeleton-btn"></div>
+                    </div>
+                </article>
+            </div>
+
+            <div class="load-more-wrap" id="loadMoreWrap">
+                <button class="load-more-btn" id="loadMoreBtn">
+                    <span class="btn-text">Load More</span>
+                    <span class="btn-count" id="loadMoreCount"></span>
+                </button>
+            </div>
+
+            <div class="empty-state" id="emptyState" hidden>
+                <div class="empty-icon">🔍</div>
+                <h2>No skins found</h2>
+                <p>Try adjusting your search or filters</p>
+                <button class="reset-btn" id="resetFilters">Reset all filters</button>
+            </div>
+
+            <div class="error-state" id="errorState" hidden>
+                <div class="empty-icon">⚠️</div>
+                <h2>Failed to load skins</h2>
+                <p>Make sure <code>cards/_index.json</code> exists and is accessible</p>
+                <button class="reset-btn" id="retryLoad">Try Again</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-label="Skin details" hidden>
+        <div class="modal-sheet" id="modalSheet">
+            <button class="modal-close" id="modalClose" aria-label="Close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
-            <div class="load-info" id="loadInfo"></div>
-        </div>
-
-        <div class="no-results" id="noResults" style="display: none;">
-            No skins found. Try different filters!
-        </div>
-    </div>
-
-    <div class="modal" id="modal" onclick="closeModal(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <button class="close-modal" onclick="closeModal()">&times;</button>
-            <img class="modal-image" id="modalImage" src="" alt="">
-            <div class="modal-info" id="modalInfo"></div>
+            <div class="modal-image-wrap">
+                <img class="modal-image" id="modalImage" src="" alt="" loading="lazy">
+                <div class="modal-image-placeholder" id="modalImagePlaceholder" aria-hidden="true"></div>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
         </div>
     </div>
 
-    <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
+    <!-- Back to top -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
 
-    <script src="assets/script.js"></script>
+    <!-- Toast -->
+    <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="assets/script.js" defer></script>
 </body>
 </html>
