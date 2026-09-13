@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="dark light">
+    <meta name="description" content="Community database of JL-Mod skins and translated J2ME games. Search, filter and download skins for the JL-Mod J2ME emulator.">
+    <meta name="theme-color" content="#0a0a0f" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+    <meta property="og:title" content="JL-Mod Skins Database">
+    <meta property="og:description" content="Find and download skins and translated JARs for the JL-Mod J2ME emulator.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="thumb/asphalt6_thumb.jpg">
+    <title>JL-Mod Skins Database</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="preload" href="assets/style.css" as="style">
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="./" class="brand" aria-label="JL-Mod Skins Database home">
+                <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="2" y="6" width="20" height="12" rx="3"/>
+                    <path d="M6 12h4M8 10v4"/>
+                    <circle cx="15" cy="11" r="1" fill="currentColor" stroke="none"/>
+                    <circle cx="18" cy="13" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+                <span class="brand-name">JL-Mod Skins</span>
+            </a>
+
+            <nav class="tabs" role="tablist" aria-label="Sections">
+                <button class="tab active" role="tab" id="tabSkins" aria-selected="true" aria-controls="panelSkins" data-tab="skins">
+                    Skins <span class="tab-count" id="countSkins" aria-hidden="true"></span>
+                </button>
+                <button class="tab" role="tab" id="tabTl" aria-selected="false" aria-controls="panelTl" data-tab="tl" tabindex="-1">
+                    Translations <span class="tab-count" id="countTl" aria-hidden="true"></span>
+                </button>
+            </nav>
+
+            <div class="header-search">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="search" id="searchInput" placeholder="Search skins…" autocomplete="off" aria-label="Search">
+                <kbd class="search-kbd" aria-hidden="true">Ctrl K</kbd>
+            </div>
+
+            <div class="header-actions">
+                <button class="icon-btn" id="filterToggle" aria-label="Filters" aria-expanded="false" aria-controls="filterPanel" title="Filters">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+                    <span class="filter-dot" id="filterDot" hidden></span>
+                </button>
+                <button class="icon-btn" id="moreMenuToggle" aria-label="More options" aria-expanded="false" aria-controls="moreMenu" title="More">
+                    <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Filter panel: skins -->
+        <div class="filter-panel" id="filterPanel" hidden>
+            <div class="filter-panel-inner" data-for="skins">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label for="filterOrientation">Orientation</label>
+                        <select id="filterOrientation" class="filter-select">
+                            <option value="all">All</option>
+                            <option value="portrait">Portrait</option>
+                            <option value="landscape">Landscape</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filterCategory">Category</label>
+                        <select id="filterCategory" class="filter-select">
+                            <option value="all">All</option>
+                            <option value="device">Device</option>
+                            <option value="game">Game</option>
+                            <option value="console">Console</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filterResolution">Resolution</label>
+                        <select id="filterResolution" class="filter-select">
+                            <option value="all">All</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filterSort">Sort by</label>
+                        <select id="filterSort" class="filter-select">
+                            <option value="newest">Newest first</option>
+                            <option value="oldest">Oldest first</option>
+                            <option value="name-asc">Name A–Z</option>
+                            <option value="name-desc">Name Z–A</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-panel-inner" data-for="tl" hidden>
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label for="tlFilterResolution">Resolution</label>
+                        <select id="tlFilterResolution" class="filter-select">
+                            <option value="all">All</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="tlFilterSort">Sort by</label>
+                        <select id="tlFilterSort" class="filter-select">
+                            <option value="newest">Newest first</option>
+                            <option value="oldest">Oldest first</option>
+                            <option value="name-asc">Name A–Z</option>
+                            <option value="name-desc">Name Z–A</option>
+                            <option value="size-asc">Smallest first</option>
+                            <option value="size-desc">Largest first</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-panel-footer">
+                <button class="reset-btn-sm" id="resetFilters">Reset filters</button>
+                <span class="filter-count" id="filterCount"></span>
+            </div>
+        </div>
+
+        <!-- More menu -->
+        <div class="more-menu" id="moreMenu" hidden>
+            <button class="menu-item" id="viewToggle">
+                <span class="menu-item-icon">
+                    <svg class="icon-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                    <svg class="icon-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                </span>
+                <span class="menu-item-text" id="viewToggleText">Grid view</span>
+            </button>
+            <button class="menu-item" id="themeToggle">
+                <span class="menu-item-icon">
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </span>
+                <span class="menu-item-text" id="themeToggleText">Light mode</span>
+            </button>
+            <a class="menu-item" id="repoLink" href="https://github.com" target="_blank" rel="noopener">
+                <span class="menu-item-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2.17c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+                </span>
+                <span class="menu-item-text">View on GitHub</span>
+            </a>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <!-- ================= SKINS ================= -->
+        <section class="panel" id="panelSkins" role="tabpanel" aria-labelledby="tabSkins">
+            <div class="stats-bar" id="statsSkins">Loading skins…</div>
+
+            <div class="skins-grid" id="skinsGrid" role="list">
+                <article class="skin-card skeleton" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-line w70"></div><div class="skeleton-line w45"></div><div class="skeleton-line w55"></div></div></article>
+                <article class="skin-card skeleton" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-line w70"></div><div class="skeleton-line w45"></div><div class="skeleton-line w55"></div></div></article>
+                <article class="skin-card skeleton" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-line w70"></div><div class="skeleton-line w45"></div><div class="skeleton-line w55"></div></div></article>
+                <article class="skin-card skeleton" aria-hidden="true"><div class="skeleton-image"></div><div class="skeleton-body"><div class="skeleton-line w70"></div><div class="skeleton-line w45"></div><div class="skeleton-line w55"></div></div></article>
+            </div>
+
+            <div class="load-more-wrap" id="loadMoreWrap">
+                <button class="load-more-btn" id="loadMoreBtn">
+                    <span class="btn-text">Load more</span>
+                    <span class="btn-count" id="loadMoreCount"></span>
+                </button>
+            </div>
+
+            <div class="state-box" id="emptyState" hidden>
+                <h2>No skins match</h2>
+                <p>Try a different search term or clear the filters.</p>
+                <button class="reset-btn" id="resetEmpty">Clear filters</button>
+            </div>
+
+            <div class="state-box" id="errorState" hidden>
+                <h2>Couldn't load the skin list</h2>
+                <p><code>cards/index.json</code> is missing or unreachable. Run <code>node scripts/build-index.js</code> or push to trigger the workflow.</p>
+                <button class="reset-btn" id="retryLoad">Try again</button>
+            </div>
+        </section>
+
+        <!-- ================= TRANSLATIONS ================= -->
+        <section class="panel" id="panelTl" role="tabpanel" aria-labelledby="tabTl" hidden>
+            <div class="tl-intro">
+                <div class="stats-bar" id="statsTl">Loading translations…</div>
+                <p class="tl-note">J2ME games translated to Indonesian by the site author. Drop the .jar into JL-Mod (or any J2ME emulator) to play.</p>
+            </div>
+
+            <div class="tl-table-wrap">
+                <table class="tl-table" id="tlTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Title</th>
+                            <th scope="col" class="col-device">Device</th>
+                            <th scope="col" class="col-res">Resolution</th>
+                            <th scope="col" class="col-size">Size</th>
+                            <th scope="col" class="col-date">Added</th>
+                            <th scope="col" class="col-dl"><span class="visually-hidden">Download</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tlBody">
+                        <tr class="tl-skeleton" aria-hidden="true"><td colspan="6"><div class="skeleton-line w55"></div></td></tr>
+                        <tr class="tl-skeleton" aria-hidden="true"><td colspan="6"><div class="skeleton-line w70"></div></td></tr>
+                        <tr class="tl-skeleton" aria-hidden="true"><td colspan="6"><div class="skeleton-line w45"></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="state-box" id="tlEmpty" hidden>
+                <h2>No translations match</h2>
+                <p>Try a different search term or clear the filters.</p>
+                <button class="reset-btn" id="tlResetEmpty">Clear filters</button>
+            </div>
+
+            <div class="state-box" id="tlNone" hidden>
+                <h2>Nothing here yet</h2>
+                <p>Translated .jar files will appear here automatically once they're added to the <code>tl/</code> folder.</p>
+            </div>
+
+            <div class="state-box" id="tlError" hidden>
+                <h2>Couldn't load the translation list</h2>
+                <p><code>tl/index.json</code> is missing or unreachable.</p>
+                <button class="reset-btn" id="tlRetry">Try again</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <span>JL-Mod Skins Database — a community archive for the <a href="https://github.com/woesss/JL-Mod" target="_blank" rel="noopener">JL-Mod</a> J2ME emulator.</span>
+            <span class="footer-muted">Skins belong to their respective authors. Want yours listed? Open a pull request.</span>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+        <div class="modal-sheet" id="modalSheet">
+            <button class="modal-close" id="modalClose" aria-label="Close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <div class="modal-image-wrap">
+                <img class="modal-image" id="modalImage" src="" alt="" decoding="async">
+                <div class="modal-image-placeholder" id="modalImagePlaceholder" aria-hidden="true"></div>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop" aria-label="Back to top" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+
+    <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="assets/script.js" defer></script>
+</body>
+</html>

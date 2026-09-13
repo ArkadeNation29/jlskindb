@@ -1,0 +1,20 @@
+{
+  "title": "Asphalt 6: Adrenaline",
+  "author": "ArkadeNation29",
+  "resolution": "480x800",
+  "orientation": "landscape",
+  "thumbnail": "thumb/asphalt6_thumb.jpg",
+  "download": "skins/Asphalt6AdrenalineLS.png",
+  "tags": [
+    "landscape",
+    "480x800",
+    "asphalt",
+    "game"
+  ],
+  "description": "A skin frame for touchscreen 480x800 games inspired by Asphalt 6: Adrenaline.",
+  "id": "asphalt-6-adrenaline",
+  "category": "game",
+  "isNew": false,
+  "dateAdded": "",
+  "downloads": 0
+}
