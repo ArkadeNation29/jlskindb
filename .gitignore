@@ -1,8 +1,7 @@
 .DS_Store
+Thumbs.db
 *.swp
 *.swo
 *~
 .vscode/
-*.sh
 *.geany
-old-index.html
